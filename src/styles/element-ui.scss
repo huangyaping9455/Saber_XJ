@@ -1,0 +1,139 @@
+.el-dropdown-menu__item {
+  font-size: 12px !important;
+  line-height: 28px !important;
+}
+.el-card.is-always-shadow {
+  box-shadow: none;
+  border: none !important;
+}
+
+.el-scrollbar__view {
+  height: 100%;
+}
+
+.el-menu--horizontal {
+  border-bottom: none !important;
+}
+
+.el-menu {
+  border-right: none !important;
+}
+
+.el-menu--display,
+.el-menu--display + .el-submenu__icon-arrow {
+  display: none;
+}
+
+.el-message__icon,
+.el-message__content {
+  display: inline-block;
+}
+
+.el-date-editor .el-range-input,
+.el-date-editor .el-range-separator {
+  height: auto;
+  overflow: hidden;
+}
+
+.el-dialog__wrapper {
+  z-index: 2048;
+}
+
+// .el-scrollbar__wrap {
+//   overflow-x: hidden;
+// }
+
+.el-col {
+  margin-bottom: 8px;
+}
+
+.el-main {
+  padding: 0 !important;
+}
+.el-dropdown-menu__item--divided:before,
+.el-menu,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+  background-color: transparent;
+}
+
+.el-dropdown-menu__item--divided:before,
+.el-menu,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+  background-color: transparent !important;
+}
+
+.el-dialog__body {
+  padding: 10px 20px 30px 20px !important;
+}
+
+.el-menu--popup .el-menu-item {
+  background: white;
+}
+
+.el-table {
+  z-index: 1;
+  th > .cell {
+    white-space: nowrap;
+  }
+}
+
+.el-date-picker {
+  width: 280px;
+  .el-time-panel {
+    width: 140px;
+  }
+  .el-input__inner {
+    height: 28px;
+  }
+  .el-date-picker__header {
+    margin: 5px;
+  }
+  .el-picker-panel__content {
+    margin: 0px auto;
+    width: 100%;
+  }
+
+  .el-date-table th {
+    padding: 0px;
+  }
+  .el-date-table td {
+    padding: 0px;
+  }
+}
+
+// 隐藏 curd 列表搜索表单中的清空按钮
+.el-form-item.avue-crud__searchMenu {
+  .el-form-item__content {
+    .el-button:nth-child(2) {
+      display: none;
+    }
+  }
+}
+
+// avue page
+
+.avue-crud__pagination {
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0px;
+  display: flex;
+  justify-content: flex-end;
+  .el-pagination {
+    position: static;
+  }
+}
+
+.avue-crud__title {
+  font-size: 20px;
+  height: 50px;
+  letter-spacing: 3px;
+  margin-bottom: 0px;
+  p {
+    margin: 0px;
+  }
+}

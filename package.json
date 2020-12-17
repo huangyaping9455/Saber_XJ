@@ -1,0 +1,44 @@
+{
+  "name": "saber-admin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "analyz": "npm_config_report=true npm run build",
+    "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "babel-polyfill": "^6.26.0",
+    "classlist-polyfill": "^1.2.0",
+    "element-ui": "^2.4.5",
+    "file-saver": "^2.0.2",
+    "js-cookie": "^2.2.0",
+    "mockjs": "^1.0.1-beta3",
+    "node-sass": "^4.14.1",
+    "nprogress": "^0.2.0",
+    "script-loader": "^0.7.2",
+    "vue": "^2.5.16",
+    "vue-axios": "^2.1.2",
+    "vue-i18n": "^8.7.0",
+    "vue-router": "^3.0.1",
+    "vuescroll": "^4.12.2",
+    "vuex": "^3.0.1",
+    "xlsx": "^0.16.7"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.1.0",
+    "@vue/cli-plugin-eslint": "^3.6.0",
+    "@vue/cli-service": "^3.1.0",
+    "babel-eslint": "^10.0.1",
+    "chai": "^4.1.2",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "sass-loader": "^7.0.1",
+    "vue-template-compiler": "^2.5.17",
+    "webpack-bundle-analyzer": "^3.0.3"
+  }
+}
