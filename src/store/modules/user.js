@@ -68,7 +68,7 @@ const user = {
     LoginByUsername({
       commit
     }, userInfo) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         loginByUsername(
           userInfo.username,
           userInfo.password,
@@ -80,7 +80,9 @@ const user = {
           commit('SET_USERIFNO', data);
           commit('DEL_ALL_TAG');
           commit('CLEAR_LOCK');
-          resolve();
+          resolve(data);
+        }).catch((err) => {
+          reject(err);
         });
       });
     },

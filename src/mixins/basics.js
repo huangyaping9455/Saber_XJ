@@ -103,13 +103,16 @@ export default {
         // excelBtn: true,
         searchBtn: false,
         height: 666,
+        selection: true,
+        tip: false,
+        reserveSelection: false,
         // maxHeight: 700,
         // menuPosition: "right",
         // searchGutter: "160",
         searchShow: false,
         labelWidth: 120,
         labelPosition: "left",
-        menuWidth: 350,
+        menuWidth: 250,
         ...(this.baseOption || {}),
         ...(isIframe ? iframeOption : {}),
       };
@@ -167,6 +170,7 @@ export default {
       search = this.tableSearch,
       sort = this.tableSort,
       other = {},
+      searchMsg,
     } = {}) {
       const api = this.CONFIG.viewModel;
       if (!api) return;
@@ -183,11 +187,12 @@ export default {
         size: page.pageSize,
         // size: 0,
         jiashiyuanxingming: this.driveSearchChange,
-        cheliangpaizhao: this.tablechepai,
-        deptName: this.tableDeptName,
-        caozuoshijian: this.caozuoshijian,
-        zongduanid: this.zongduanid,
-        cheliangzhuangtai: this.cheliangzhuangtai,
+        // cheliangpaizhao: this.tablechepai,
+        // deptName: this.tableDeptName,
+        // caozuoshijian: this.caozuoshijian,
+        // zongduanid: this.zongduanid,
+        // cheliangzhuangtai: this.cheliangzhuangtai,
+        ...searchMsg,
         ...search,
         ...sort,
         ...other,
@@ -195,11 +200,18 @@ export default {
       this.tableLoading = true;
       return getList(api, params).then((res) => {
         res.data.data.records = res.data.data.records.map((i) => {
-          i.zhaopian = JSON.stringify(i.zhaopian);
-          i.shenfenzhengfujian = JSON.stringify(i.shenfenzhengfujian);
-          i.congyezhengfujian = JSON.stringify(i.congyezhengfujian);
-          i.jiashizhengfujian = JSON.stringify(i.jiashizhengfujian);
-          i.fuyinjian = JSON.stringify(i.fuyinjian);
+          if (i.ranliaoxiaohaofujian) {
+            i.ranliaoxiaohaofujian = eval(i.ranliaoxiaohaofujian);
+          }
+          if (i.cheliangzhaopian) {
+            i.cheliangzhaopian = eval(i.cheliangzhaopian);
+          }
+          if (i.fujian) {
+            i.fujian = eval(i.fujian);
+          }
+          if (i.jidongchejiashizheng) {
+            i.jidongchejiashizheng = eval(i.jidongchejiashizheng);
+          }
           return i;
         })
         let data = res.data.data;
@@ -346,9 +358,11 @@ export default {
     },
     // 分页触发器，初始化加载数据，
     onLoad(page) {
+      let searchMsg = this.$refs.searchdialog.searchMsg;
       this.$nextTick(() =>
         this.getList({
           page,
+          searchMsg
         })
       );
     },
@@ -412,7 +426,7 @@ export default {
         let ids = "";
         let item = newData[key];
         if (!item) return;
-        if (item.length && item.length > 0) {
+        if (item.length && item.length != 0) {
           newData[key].forEach((file) => {
             ids += `${file.url.split("/").pop()},`;
           });

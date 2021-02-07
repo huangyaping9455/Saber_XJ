@@ -26,7 +26,11 @@
         size="small"
         auto-complete="off"
       >
-        <i slot="suffix" class="el-icon-view el-input__icon" @click="showPassword"></i>
+        <i
+          slot="suffix"
+          class="el-icon-view el-input__icon"
+          @click="showPassword"
+        ></i>
         <i slot="prefix" class="icon-mima"></i>
       </el-input>
     </el-form-item>
@@ -49,7 +53,8 @@
         size="small"
         class="login-submit"
         @click.native.prevent="handleLogin"
-      >{{ $t("login.submit") }}</el-button>
+        >{{ $t("login.submit") }}</el-button
+      >
     </el-form-item>
   </el-form>
 </template>
@@ -105,9 +110,15 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.$store.dispatch("LoginByUsername", this.loginForm).then(() => {
-            this.$router.push({ path: this.tagWel.value });
-          });
+          this.$store
+            .dispatch("LoginByUsername", this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.tagWel.value });
+            })
+            .catch(() => {})
+            .finally(() => {
+              this.getVerCode();
+            });
         }
       });
     },
@@ -115,5 +126,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

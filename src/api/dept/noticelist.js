@@ -12,7 +12,7 @@ export const getList = (dept, current, size) => {
   });
 };
 
-export const getStatus = (id,isdeleted, updateuser) => {
+export const getStatus = (id, isdeleted, updateuser) => {
   return request({
     url: '/api/blade-platform/platform/appVersionInfo/update',
     method: 'post',
@@ -20,7 +20,7 @@ export const getStatus = (id,isdeleted, updateuser) => {
       id,
       isdeleted,
       updateuser,
-      
+
     }
 
   });
@@ -73,7 +73,7 @@ export const getfild = (file, fileld, table) => {
   });
 };
 // 人员管理
-export const getListProson = (deptId, current, size,deptName,account,realName) => {
+export const getListProson = (deptId, current, size, deptName, account, realName) => {
   return request({
     url: '/api/blade-user/user/userlist',
     method: 'post',
@@ -92,7 +92,10 @@ export const Prosonremove = (ids) => {
   return request({
     url: '/api/blade-user/user/remove',
     method: 'post',
-    data: {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    params: {
       ids
     }
   });
@@ -102,7 +105,10 @@ export const Prosonrepsd = (userIds) => {
   return request({
     url: '/api/blade-user/user/reset-password',
     method: 'post',
-    data: {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    params: {
       userIds
     }
   });
@@ -129,7 +135,7 @@ export const resetPassword = (ids) => {
 };
 
 // 驾驶员信息 绑定车辆
-export const getJSYVehiclelist = (deptId,jiashiyuanleixing,current,size,deptName,jiashiyuanxingming,biaoshi) => {
+export const getJSYVehiclelist = (deptId, jiashiyuanleixing, current, size, deptName, jiashiyuanxingming, biaoshi) => {
   return request({
     url: '/api/blade-platform/platform/jiashiyuan/getJVPageList',
     method: 'get',

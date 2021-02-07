@@ -97,3 +97,30 @@ export const removeFiles = (ids) =>
       ids
     }
   });
+// 停用
+export const getUpdateVehicleOutStatus = (id) =>
+  request({
+    url: '/api/blade-platform/platform/vehicle/updateVehicleOutStatus',
+    method: 'POST',
+    params: {
+      id
+    }
+  });
+// 在用
+export const getupdateVehicleSignStatus = (id) =>
+  request({
+    url: '/api/blade-platform/platform/vehicle/updateVehicleSignStatus',
+    method: 'POST',
+    params: {
+      id
+    }
+  });
+// 报废
+export const getUpdateVehicleScrapStatus = (id) =>
+  request({
+    url: '/api/blade-platform/platform/vehicle/updateVehicleScrapStatus',
+    method: 'POST',
+    params: {
+      id
+    }
+  });

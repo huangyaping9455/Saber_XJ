@@ -5,22 +5,36 @@
         <div class="person-head-left">
           <div class="person-head-input">
             <span>单位查询：</span>
-            <el-input v-model="deptname" placeholder="请输入单位" clearable></el-input>
+            <el-input
+              v-model="deptname"
+              placeholder="请输入单位"
+              clearable
+            ></el-input>
           </div>
           <div class="person-head-input">
             <span>登录账号：</span>
-            <el-input v-model="account" placeholder="请输入账号" clearable></el-input>
+            <el-input
+              v-model="account"
+              placeholder="请输入账号"
+              clearable
+            ></el-input>
           </div>
           <div class="person-head-input">
-            <span>姓  名：</span>
-            <el-input v-model="name" placeholder="请输入姓名" clearable></el-input>
+            <span>姓 名：</span>
+            <el-input
+              v-model="name"
+              placeholder="请输入姓名"
+              clearable
+            ></el-input>
           </div>
           <el-button type="primary" @click="refreshList">
             <i class="el-icon-search"></i>查询
           </el-button>
         </div>
         <div class="person-head-right">
-          <el-button type="primary" @click="befoExport" :loading="exportLoading"><i class="el-icon-download"></i>下载</el-button>
+          <el-button type="primary" @click="befoExport" :loading="exportLoading"
+            ><i class="el-icon-download"></i>下载</el-button
+          >
           <el-tooltip content="刷新" placement="top" style="margin-right: 1rem">
             <el-button
               type="primary"
@@ -40,14 +54,24 @@
         :height="caleHeight"
         ref="table"
       >
-        <el-table-column  type="index" align="center" label="序号" width="50"></el-table-column>
+        <el-table-column
+          type="index"
+          align="center"
+          label="序号"
+          width="50"
+        ></el-table-column>
         <el-table-column
           align="center"
           prop="id"
           label="人员ID"
           width="100"
         ></el-table-column>
-        <el-table-column align="center" prop="deptName" label="所属单位" width="270"></el-table-column>
+        <el-table-column
+          align="center"
+          prop="deptName"
+          label="所属单位"
+          width="270"
+        ></el-table-column>
         <el-table-column
           align="center"
           prop="name"
@@ -70,7 +94,7 @@
           prop="phone"
           label="手机号码"
         ></el-table-column>
-         <el-table-column
+        <el-table-column
           align="center"
           prop="createTimes"
           label="创建时间"
@@ -83,16 +107,18 @@
         <el-table-column fixed="right" width="200" align="center" label="操作">
           <template slot-scope="scope">
             <el-button
-            type="danger"
-              @click="deleteRow(scope.$index, tableData)"
-              size="small">
-              删除
+              type="text"
+              @click.native.prevent="deleteRows(scope.$index, tableData)"
+              size="small"
+            >
+              重置密码
             </el-button>
             <el-button
-            type="warning"
-              @click.native.prevent="deleteRows(scope.$index, tableData)"
-              size="small">
-              重置密码
+              type="text"
+              @click="deleteRow(scope.$index, tableData)"
+              size="small"
+            >
+              岗位删除
             </el-button>
           </template>
         </el-table-column>
@@ -101,8 +127,12 @@
         title="删除"
         :visible.sync="centerDialogVisible"
         width="30%"
-        center>
-        <span style="font-size:20px;text-align:center;"><i style="color:red;" class="el-icon-warning-outline"></i>确定要删除吗？</span>
+        center
+      >
+        <span style="font-size:20px;text-align:center;"
+          ><i style="color:red;" class="el-icon-warning-outline"></i
+          >确定要删除吗？</span
+        >
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="trueDeleteRow">确 定</el-button>
@@ -112,8 +142,12 @@
         title="重置密码"
         :visible.sync="centerDialogVisibles"
         width="30%"
-        center>
-        <span style="font-size:20px;text-align:center;"><i style="color:red;" class="el-icon-warning-outline"></i>确定要重置密码吗？</span>
+        center
+      >
+        <span style="font-size:20px;text-align:center;"
+          ><i style="color:red;" class="el-icon-warning-outline"></i
+          >确定要重置密码吗？</span
+        >
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisibles = false">取 消</el-button>
           <el-button type="primary" @click="trueDeleteRows">确 定</el-button>
@@ -138,7 +172,7 @@
 import {
   getListProson,
   Prosonremove,
-  Prosonrepsd
+  Prosonrepsd,
 } from "@/api/dept/noticelist";
 import { export_json_to_excel } from "../vehicle/Export2Excel";
 let date = new Date();
@@ -146,17 +180,17 @@ export default {
   data() {
     return {
       loading: false,
-      exportLoading:false,
+      exportLoading: false,
       current: 1,
       size: 20,
       total: 1,
-      deptname:"",
-      name:"",
-      account:"",
-      caleHeight:670,
-      centerDialogVisible:false,
-      centerDialogVisibles:false,
-      lineData:"",
+      deptname: "",
+      name: "",
+      account: "",
+      caleHeight: 670,
+      centerDialogVisible: false,
+      centerDialogVisibles: false,
+      lineData: "",
       tableData: [
         {
           // id: "0",
@@ -174,14 +208,16 @@ export default {
   computed: {},
   mounted() {
     this.onLoad();
-    this.$nextTick(function () {
-      this.caleHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 137;
+    this.$nextTick(function() {
+      this.caleHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 137;
       // 监听窗口大小变化
       let self = this;
       window.onresize = function() {
-        self.caleHeight = window.innerHeight - self.$refs.table.$el.offsetTop - 137
-      }
-    })
+        self.caleHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 137;
+      };
+    });
   },
   methods: {
     // 列表数据
@@ -190,17 +226,19 @@ export default {
       let deptId = this.$store.getters.deptId;
       let current = this.current;
       let size = this.size;
-      let deptName =this.deptname;
-      let account =this.account;
-      let realName =this.name;
-      getListProson(deptId, current, size,deptName,account,realName).then((res) => {
-        this.loading = false;
-        const data = res.data.data;
-        this.total = data.total;
-        this.size = data.size;
-        this.current = data.current;
-        this.tableData = data.records;
-      });
+      let deptName = this.deptname;
+      let account = this.account;
+      let realName = this.name;
+      getListProson(deptId, current, size, deptName, account, realName).then(
+        (res) => {
+          this.loading = false;
+          const data = res.data.data;
+          this.total = data.total;
+          this.size = data.size;
+          this.current = data.current;
+          this.tableData = data.records;
+        }
+      );
     },
     // 每页显示条数改变
     handleSizeChange(val) {
@@ -218,36 +256,36 @@ export default {
       this.onLoad();
     },
     // 删除
-    deleteRow(index,data){
-      this.centerDialogVisible =true;
-      this.lineData =data[index];
+    deleteRow(index, data) {
+      this.centerDialogVisible = true;
+      this.lineData = data[index];
     },
     // 重置密码
-    deleteRows(index,data){
-      this.lineData =data[index];
-      this.centerDialogVisibles =true;
+    deleteRows(index, data) {
+      this.lineData = data[index];
+      this.centerDialogVisibles = true;
     },
     // 确认删除
-    trueDeleteRow(){
-      Prosonremove(this.lineData.id).then(res =>{
-        if(res.data.code == 200){
-          this.centerDialogVisible =false;
+    trueDeleteRow() {
+      Prosonremove(this.lineData.id).then((res) => {
+        if (res.data.code == 200) {
+          this.centerDialogVisible = false;
           this.refreshList();
-        }else{
-          this.$message.error("出错了")
+        } else {
+          this.$message.error("出错了");
         }
-      })
+      });
     },
     // 确认重置密码
-    trueDeleteRows(){
-      Prosonrepsd(this.lineData.id).then(res =>{
-        if(res.data.code == 200){
-          this.centerDialogVisibles =false;
+    trueDeleteRows() {
+      Prosonrepsd(this.lineData.id).then((res) => {
+        if (res.data.code == 200) {
+          this.centerDialogVisibles = false;
           this.refreshList();
-        }else{
-          this.$message.error("出错了")
+        } else {
+          this.$message.error("出错了");
         }
-      })
+      });
     },
     //  导出表格
     befoExport() {
@@ -255,23 +293,25 @@ export default {
       let deptId = this.$store.getters.deptId;
       let current = 0;
       let size = 0;
-      let deptName =this.deptname;
-      let account =this.account;
-      let realName =this.name;
-      getListProson(deptId, current, size,deptName,account,realName).then((res) => {
-        if (res.data.success == true) {
-          res.data.data = res.data.data.records.map((el, index) => {
-            return {
-              ...el,
-              index: index + 1,
-            };
-          });
-          this.export2Excel(res.data.data);
-          this.exportLoading = false;
-        } else {
-          this.$message.error(err);
+      let deptName = this.deptname;
+      let account = this.account;
+      let realName = this.name;
+      getListProson(deptId, current, size, deptName, account, realName).then(
+        (res) => {
+          if (res.data.success == true) {
+            res.data.data = res.data.data.records.map((el, index) => {
+              return {
+                ...el,
+                index: index + 1,
+              };
+            });
+            this.export2Excel(res.data.data);
+            this.exportLoading = false;
+          } else {
+            this.$message.error(err);
+          }
         }
-      });
+      );
     },
     //处理下载数据
     formatJson(filterVal, jsonData) {
@@ -333,22 +373,22 @@ export default {
   height: 100%;
   .app-text {
     padding: 0.5rem;
-    .person-head{
-     display: flex;
-     justify-content: space-between;
-     .person-head-left{
-       display: flex;
-       .person-head-input{
-         display: flex;
-         margin-right:10px;
-         span{
-           width: 50%;
-           text-align: end;
-           line-height: 30px;
-           font-weight: 500;
-         }
-       }
-     }
+    .person-head {
+      display: flex;
+      justify-content: space-between;
+      .person-head-left {
+        display: flex;
+        .person-head-input {
+          display: flex;
+          margin-right: 10px;
+          span {
+            width: 50%;
+            text-align: end;
+            line-height: 30px;
+            font-weight: 500;
+          }
+        }
+      }
     }
     .el-table {
       z-index: 0;
