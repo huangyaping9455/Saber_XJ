@@ -4,8 +4,13 @@
     <div v-else class="field-config">
       <!-- 当前模块名称 -->
       <div class="title">
-        <b>模块字段管理 {{node.label}} {{state.title}} {{fieldData.label}}</b>
-        <el-button size="mini" icon="el-icon-back" @click="toModel">返回模块管理</el-button>
+        <b
+          >模块字段管理 {{ node.label }} {{ state.title }}
+          {{ fieldData.label }}</b
+        >
+        <el-button size="mini" icon="el-icon-back" @click="toModel"
+          >返回模块管理</el-button
+        >
       </div>
 
       <!-- 字段列表 -->
@@ -16,7 +21,12 @@
           placeholder="输入关键字进行过滤"
           prefix-icon="el-icon-search"
         ></el-input>
-        <el-tag v-show="filterList.length==0" type="info" class="side-leave-active">暂无数据</el-tag>
+        <el-tag
+          v-show="filterList.length == 0"
+          type="info"
+          class="side-leave-active"
+          >暂无数据</el-tag
+        >
         <transition-group name="side">
           <el-tag
             v-for="item in filterList"
@@ -25,7 +35,7 @@
             @close="toRemove(item)"
             @click="toEdit(item)"
           >
-            <span>{{item.sort}} {{item.label}}</span>
+            <span>{{ item.sort }} {{ item.label }}</span>
           </el-tag>
         </transition-group>
       </div>
@@ -182,6 +192,8 @@ export default {
       let state = this.state;
       state.submit(state.url, state.id, config).then(() => {
         this.thenCallback(state.message);
+        // 表单禁用
+        this.$refs.form.allDisabled = false;
       });
     },
     toAdd() {
@@ -239,7 +251,7 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang="scss">
 .field-config {
   display: flex;
   flex-wrap: wrap;

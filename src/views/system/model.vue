@@ -2,7 +2,7 @@
   <basic-container>
     <div v-loading="isLoading" class="model-config">
       <p class="title">
-        <b>模块配置 - {{treeNode.data.muban}} - {{state.title}}</b>
+        <b>模块配置 - {{ treeNode.data.muban }} - {{ state.title }}</b>
       </p>
       <!-- 模板树 -->
       <div class="tree">
@@ -15,9 +15,10 @@
         <el-tree
           ref="tree"
           lazy
-          :props="{ isLeaf: 'leaf',label:'muban'}"
+          :props="{ isLeaf: 'leaf', label: 'muban' }"
           :load="loadNode"
           :filter-node-method="filterNode"
+          @node-click="selectedNode"
           highlight-current
           accordion
           empty-text="暂无数据"
@@ -29,12 +30,17 @@
       <!-- 右侧表单 -->
       <div class="form">
         <button-group :group="buttonGroup" @action="onAction"></button-group>
-        <avue-form ref="form" v-model="formData" :option="formOption" @submit="submit"></avue-form>
+        <avue-form
+          ref="form"
+          v-model="formData"
+          :option="formOption"
+          @submit="submit"
+        ></avue-form>
       </div>
     </div>
   </basic-container>
 </template>
- 
+
 <script>
 import {
   getList,
@@ -42,7 +48,7 @@ import {
   insert,
   update,
   initField,
-  initModel
+  initModel,
 } from "@/api/system/model";
 import buttonGroup from "C/button-group";
 import CONFIG from "@/const/model/model";
@@ -50,10 +56,10 @@ import CONFIG from "@/const/model/model";
 export default {
   name: "model",
   components: {
-    buttonGroup
+    buttonGroup,
   },
   props: {
-    value: Object
+    value: Object,
   },
   data() {
     return {
@@ -61,8 +67,9 @@ export default {
       stateText: "add",
       filterText: "",
       treeNode: {
-        data: {}
+        data: {},
       },
+      topNode: "",
       formData: {},
       formState: {
         add: {
@@ -70,20 +77,20 @@ export default {
           params: {},
           title: "新增",
           message: "新增成功",
-          callback: data => {
+          callback: (data) => {
             this.$refs.tree.append(data, this.treeNode.data);
-          }
+          },
         },
         edit: {
           submit: update,
           params: {},
           title: "编辑",
           message: "修改成功",
-          callback: data => {
+          callback: (data) => {
             this.treeNode.data = data;
-          }
-        }
-      }
+          },
+        },
+      },
     };
   },
   computed: {
@@ -102,7 +109,7 @@ export default {
       return {
         labelWidth: 120,
         labelPosition: "left",
-        column: [...baseConfig, ...(formIsMenuType ? [] : intensifyConfig)]
+        column: [...baseConfig, ...(formIsMenuType ? [] : intensifyConfig)],
       };
     },
     // 按钮组
@@ -113,55 +120,56 @@ export default {
         {
           text: "返回编辑",
           action: "toEdit",
-          show: !isEdit
+          show: !isEdit,
         },
         {
           text: "新增模块",
           action: "toAdd",
-          show: isEdit && nodeIsMenuType
+          show: isEdit && nodeIsMenuType,
         },
         {
           text: "删除模块",
           action: "toRmove",
-          show: isEdit && !this.isChildren
+          show: isEdit && !this.isChildren,
         },
         {
           text: "一键初始化模板",
           action: "toInitModel",
-          show: isEdit && this.treeNode.level == 1
+          show: isEdit && this.treeNode.level == 1,
         },
         {
           text: "配置初始化",
           action: "toInitField",
-          show: isEdit && !nodeIsMenuType
+          show: isEdit && !nodeIsMenuType,
         },
         {
           text: "配置预览",
           action: "toPreview",
-          show: isEdit && !nodeIsMenuType
+          show: isEdit && !nodeIsMenuType,
         },
         {
           text: "配置模块字段",
           action: "tofield",
-          show: isEdit && !nodeIsMenuType
-        }
+          show: isEdit && !nodeIsMenuType,
+        },
       ];
-    }
+    },
   },
   watch: {
     filterText(val) {
       this.$refs.tree.filter(val);
-    }
+    },
   },
   methods: {
     loadNode(node, resolve) {
       let id = node.level === 0 ? "" : node.data.id;
-      getList(id).then(res => {
+      getList(id).then((res) => {
         let data = res.data.data;
-        data.forEach(item => (item.leaf = item.existChild === 0));
+        data.forEach((item) => (item.leaf = item.existChild === 0));
         if (node.level === 0) {
           this.$nextTick(() => {
             this.isLoading = false;
+            this.topNode = data[0];
             this.treeNode = this.$refs.tree.getNode(data[0]);
             this.$refs.tree.setCurrentNode(data[0]);
             this.toEdit();
@@ -184,13 +192,21 @@ export default {
       this.treeNode = node;
       this.toEdit();
     },
+    // 选则顶级节点
+    selectTopNode() {
+      this.$nextTick(() => {
+        this.treeNode = this.$refs.tree.getNode(this.topNode);
+        this.$refs.tree.setCurrentNode(this.topNode);
+        this.toEdit();
+      });
+    },
     onAction(item) {
       this[item.action] && this[item.action](item);
     },
     thenCallback(message, callback) {
       this.$message({
         type: "success",
-        message
+        message,
       });
       callback && callback();
     },
@@ -198,6 +214,7 @@ export default {
     toAdd() {
       this.stateText = "add";
       this.state.params.parentId = this.treeNode.data.id;
+      this.formData.parentId = this.treeNode.data.id;
       // this.$refs.form.resetForm;
       this.$refs.form.resetForm();
     },
@@ -211,23 +228,26 @@ export default {
     submit() {
       let state = this.state;
       let params = Object.assign(state.params, this.formData);
-      state.submit(params).then(res => {
+      params.is_deleted = 0;
+      state.submit(params).then((res) => {
         this.thenCallback(state.message, () => {
           state.callback(res.data.data);
+          this.$refs.form.allDisabled = false;
         });
       });
     },
     toRmove() {
       this.$confirm("此操作将删除该模板, 是否继续?", "提示", {
-        type: "warning"
+        type: "warning",
       }).then(() => {
         remove(this.treeNode.data.id).then(() => {
           this.thenCallback("删除成功", () => {
             const children = this.treeNode.parent.childNodes;
             const index = children.findIndex(
-              d => d.data.id === this.treeNode.data.id
+              (d) => d.data.id === this.treeNode.data.id
             );
             children.splice(index, 1);
+            this.selectTopNode();
           });
         });
       });
@@ -236,16 +256,16 @@ export default {
       this.$confirm("确定要初始化该模块？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       }).then(() => {
         let tableName = this.formData.biaoming;
         if (tableName.trim() == "") {
           return this.$message({
             type: "error",
-            message: "初始失败，未找到模块表名"
+            message: "初始失败，未找到模块表名",
           });
         }
-        initField(this.$store.getters.deptId, tableName).then(res => {
+        initField(this.$store.getters.deptId, tableName).then((res) => {
           if (res.data.success) {
             this.thenCallback(res.data.msg);
           }
@@ -256,9 +276,9 @@ export default {
       this.$confirm("确定要初始化所有模块？", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       }).then(() => {
-        initModel(this.$store.getters.deptId).then(res => {
+        initModel(this.$store.getters.deptId).then((res) => {
           if (res.data.success) {
             this.thenCallback(res.data.msg);
           }
@@ -268,20 +288,20 @@ export default {
     tofield() {
       this.$store.commit("SET_MODEL", this.treeNode.data);
       this.$router.push({
-        path: `/system/field?id=${this.treeNode.data.id}`
+        path: `/system/field?id=${this.treeNode.data.id}`,
       });
     },
     toPreview() {
       this.$store.commit("SET_MODEL", this.treeNode.data);
       this.$router.push({
-        path: `/system/preview?id=${this.treeNode.data.id}`
+        path: `/system/preview?id=${this.treeNode.data.id}`,
       });
-    }
-  }
+    },
+  },
 };
 </script>
- 
-<style lang="scss" >
+
+<style lang="scss">
 .model-config {
   width: 100%;
   min-height: 100%;

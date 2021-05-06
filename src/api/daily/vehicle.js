@@ -1,13 +1,13 @@
 import request from '@/router/axios';
 
 // 车辆变更
-// export const getYDList = (data) => {
-//   return request({
-//     url: '/api/blade-anbiao/anbiao/vehiclesMoveInfo/list',
-//     method: 'post',
-//     data
-//   });
-// };
+export const getYDList = (data) => {
+  return request({
+    url: '/api/blade-platform/platform/vehiclesMoveInfo/list',
+    method: 'post',
+    data
+  });
+};
 // 车辆信息 机构异动
 export const getYDtree = (postId) => {
   return request({

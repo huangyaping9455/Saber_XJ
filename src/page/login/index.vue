@@ -2,24 +2,31 @@
   <div class="login-container" @keyup.enter.native="handleLogin">
     <top-color v-show="false"></top-color>
     <div class="login-weaper animated bounceInDown">
-      <div class="login-left">
-        <div class="login-time">{{time}}</div>
+      <!-- <div class="login-left">
+        <div class="login-time">{{ time }}</div>
         <img class="img" src="/img/logo.png" alt />
-        <p class="title">{{ $t('login.info') }}</p>
-      </div>
+        <p class="title">{{ $t("login.info") }}</p>
+      </div> -->
       <div class="login-border">
         <div class="login-main">
+          <!-- {{ $t("login.title") }} -->
           <h4 class="login-title">
-            {{ $t('login.title') }}{{website.title}}
+            {{ website.title }}
             <top-lang></top-lang>
           </h4>
-          <userLogin v-if="activeName==='user'"></userLogin>
-          <codeLogin v-else-if="activeName==='code'"></codeLogin>
-          <thirdLogin v-else-if="activeName==='third'"></thirdLogin>
+          <userLogin v-if="activeName === 'user'"></userLogin>
+          <codeLogin v-else-if="activeName === 'code'"></codeLogin>
+          <thirdLogin v-else-if="activeName === 'third'"></thirdLogin>
           <div class="login-menu">
-            <a href="#" @click.stop="activeName='user'">{{ $t('login.userLogin') }}</a>
-            <a href="#" @click.stop="activeName='code'">{{ $t('login.phoneLogin') }}</a>
-            <a href="#" @click.stop="activeName='third'">{{ $t('login.thirdLogin') }}</a>
+            <!-- <a href="#" @click.stop="activeName = 'user'">{{
+              $t("login.userLogin")
+            }}</a>
+            <a href="#" @click.stop="activeName = 'code'">{{
+              $t("login.phoneLogin")
+            }}</a>
+            <a href="#" @click.stop="activeName = 'third'">{{
+              $t("login.thirdLogin")
+            }}</a> -->
           </div>
         </div>
       </div>
@@ -27,33 +34,33 @@
   </div>
 </template>
 <script>
-import userLogin from './userlogin';
-import codeLogin from './codelogin';
-import thirdLogin from './thirdlogin';
-import { mapGetters } from 'vuex';
-import { dateFormat } from '@/util/date';
-import { validatenull } from '@/util/validate';
-import topLang from '@/page/index/top/top-lang';
-import topColor from '@/page/index/top/top-color';
-import iframe from '@/mixins/iframe.js';
+import userLogin from "./userlogin";
+import codeLogin from "./codelogin";
+import thirdLogin from "./thirdlogin";
+import { mapGetters } from "vuex";
+import { dateFormat } from "@/util/date";
+import { validatenull } from "@/util/validate";
+import topLang from "@/page/index/top/top-lang";
+import topColor from "@/page/index/top/top-color";
+import iframe from "@/mixins/iframe.js";
 export default {
-  name: 'login',
+  name: "login",
   components: {
     userLogin,
     codeLogin,
     thirdLogin,
     topLang,
-    topColor
+    topColor,
   },
   mixins: [iframe],
   data() {
     return {
-      time: '',
-      activeName: 'user'
+      time: "",
+      activeName: "user",
     };
   },
   computed: {
-    ...mapGetters(['website'])
+    ...mapGetters(["website"]),
   },
   watch: {
     $route() {
@@ -64,15 +71,15 @@ export default {
         const loading = this.$loading({
           lock: true,
           text: `${
-            this.socialForm.state === 'WX' ? '微信' : 'QQ'
+            this.socialForm.state === "WX" ? "微信" : "QQ"
           }登录中,请稍后。。。`,
-          spinner: 'el-icon-loading'
+          spinner: "el-icon-loading",
         });
         setTimeout(() => {
           loading.close();
         }, 2000);
       }
-    }
+    },
   },
   created() {
     this.getTime();
@@ -85,11 +92,11 @@ export default {
   methods: {
     getTime() {
       this.time = dateFormat(new Date());
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-@import '@/styles/login.scss';
+@import "@/styles/login.scss";
 </style>

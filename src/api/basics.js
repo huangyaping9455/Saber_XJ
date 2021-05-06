@@ -124,3 +124,15 @@ export const getUpdateVehicleScrapStatus = (id) =>
       id
     }
   });
+// 修改终端id
+export const updateVehicleZongDuanId = (id, newzongduanid, userid, username) =>
+  request({
+    url: '/api/blade-platform/platform/vehicle/updateVehicleZongDuanId',
+    method: 'POST',
+    params: {
+      id,
+      newzongduanid,
+      userid,
+      username
+    }
+  });

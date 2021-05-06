@@ -8,16 +8,20 @@
     <!-- 机构树 -->
     <div class="tree">
       <scroll>
+        <el-input placeholder="输入关键字进行过滤" v-model="filterText">
+        </el-input>
         <el-tree
           ref="tree"
           lazy
+          class="filter-tree"
           :load="loadNode"
-          :props="{ isLeaf: isLeaf, label: 'deptName' }"
+          :props="{ label: 'deptName' }"
           :expand-on-click-node="false"
           highlight-current
           empty-text="暂无数据"
           node-key="id"
           @current-change="nodeChange"
+          :filter-node-method="filterNode"
         ></el-tree>
       </scroll>
     </div>
@@ -37,11 +41,11 @@
           @action="onAction"
         ></dept-form>
         <!-- 绑定地址 -->
-        <address-form
+        <!-- <address-form
           :node="nodeData"
           :state="state"
           @action="onAction"
-        ></address-form>
+        ></address-form> -->
         <!-- 岗位人员-列表 -->
         <post-table :node="nodeData" :state="state"></post-table>
       </scroll>
@@ -64,7 +68,7 @@ import organForm from "./organ-form";
 import addressForm from "./address-form";
 import deptForm from "./dept-form";
 import postTable from "./post-table";
-import basics from "@/mixins/basics";
+import basicsdept from "@/mixins/basicsdept";
 export default {
   name: "index",
   components: {
@@ -75,7 +79,7 @@ export default {
     postTable,
     addressForm,
   },
-  mixins: [basics],
+  mixins: [basicsdept],
   data() {
     return {
       // showAddress: true,
@@ -90,15 +94,18 @@ export default {
       topNode: "",
       node_had: "",
       resolve_had: "",
+      filterText: "",
     };
+  },
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val);
+    },
   },
   computed: {
     nodeData() {
       return this.treeNode.data;
     },
-    // nodeForm() {
-    //   return this.treeNode.data;
-    // },
     removeFileIds() {
       return this.fileIds;
     },
@@ -165,15 +172,16 @@ export default {
           },
           show: (s.isOrgan || s.isDept) && s.isEdit,
         },
-        // {
-        //   text: "机构异动",
-        //   action: "showGrantTree",
-        //   param: {
-        //     mark: 3,
-        //     title: "机构异动",
-        //   },
-        //   show: s.isOrgan && s.isEdit,
-        // },
+        {
+          text: "机构异动",
+          action: "showGrantTree",
+          param: {
+            mark: 3,
+            title: "机构异动",
+          },
+          show:
+            s.isOrgan && s.isEdit && this.$store.getters.userInfo.userId == "1",
+        },
         {
           text: "岗位权限",
           action: "showGrantTree",
@@ -209,7 +217,7 @@ export default {
         });
       }
       // 不是第一级
-      if (node.data.children.length > 0) {
+      if (node.data.children && node.data.children.length > 0) {
         // 如果已经存在下级
         resolve(node.data.children);
       } else {
@@ -224,7 +232,11 @@ export default {
       this.treeNode = node;
       this.toEdit();
     },
-
+    // 树节点的 筛选
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.deptName.indexOf(value) !== -1;
+    },
     // 树懒加载刷新方法
     requestNewData() {
       this.node_had.childNodes = []; //把存起来的node的子节点清空，不然会界面会出现重复树！
@@ -286,7 +298,6 @@ export default {
     update() {
       const callback = (res) => (this.treeNode.data = res.data.data);
       this.rowUpdate(this.formData, -1, callback, false);
-      // window.location.reload();
     },
     // 删除
     remove() {
@@ -296,7 +307,6 @@ export default {
         children.splice(index, 1);
         this.treeNode.parent.isLeaf = children.length == 0;
         this.selectTopNode();
-        // window.location.reload();
       };
       this.rowDel(this.nodeData, callback, false);
     },

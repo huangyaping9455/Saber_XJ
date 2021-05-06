@@ -7,7 +7,7 @@ export const loginByUsername = (
     name,
     password,
     verificationCode,
-    status = 1
+    status = 0
   ) =>
   request({
     url: '/api/blade-auth/signIn',
@@ -68,7 +68,7 @@ export const getTopMenu = () =>
 
 export const sendLogs = (list) =>
   request({
-    url: baseUrl + '/user/signOut',
+    url: baseUrl + '/user/logout',
     method: 'post',
     data: list
   });
@@ -91,5 +91,14 @@ export const changepassword = (userId, oldpassWord, passWord) =>
       userId,
       oldpassWord,
       passWord
+    }
+  });
+
+export const getUsersByDept = (deptId) =>
+  request({
+    url: '/api/blade-user/user/selectByDeptId',
+    method: 'get',
+    params: {
+      deptId
     }
   });

@@ -73,7 +73,7 @@ export const getfild = (file, fileld, table) => {
   });
 };
 // 人员管理
-export const getListProson = (deptId, current, size, deptName, account, realName) => {
+export const getListProson = (deptId, current, size, deptName, account, realName, zhuangtai) => {
   return request({
     url: '/api/blade-user/user/userlist',
     method: 'post',
@@ -83,7 +83,8 @@ export const getListProson = (deptId, current, size, deptName, account, realName
       size,
       deptName,
       account,
-      realName
+      realName,
+      zhuangtai
     }
   });
 };
@@ -97,6 +98,21 @@ export const Prosonremove = (ids) => {
     },
     params: {
       ids
+    }
+  });
+};
+// 人员管理（删除）
+export const updateUserStatus = (ids, status, user) => {
+  return request({
+    url: '/api/blade-user/user/updateUserStatus',
+    method: 'post',
+    headers: {
+      "content-type": "application/x-www-form-urlencoded"
+    },
+    params: {
+      ids,
+      status,
+      user
     }
   });
 };
@@ -128,7 +144,7 @@ export const resetPassword = (ids) => {
   return request({
     url: '/api/blade-platform/platform/jiashiyuan/resetPassword',
     method: 'post',
-    data: {
+    params: {
       ids
     }
   });
@@ -156,5 +172,35 @@ export const getallyujing = () => {
   return request({
     url: '/api/blade-platform/platform/yujingquanxian/allyujing',
     method: 'get',
+  });
+};
+// 驾驶员信息 绑定车辆
+export const getGDSVehicleList = (deptId, begintime, endtime, current, size) => {
+  return request({
+    url: '/api/blade-platform/platform/vehicle/selectGDSVehicleList',
+    method: 'post',
+    data: {
+      deptId,
+      begintime,
+      endtime,
+      current,
+      size,
+    },
+  });
+};
+// 驾驶员信息 绑定车辆
+export const getGDSMXVehicleList = (deptId, begintime, endtime, current, size, areaName, cheliangzhuangtai) => {
+  return request({
+    url: '/api/blade-platform/platform/vehicle/selectGDSMXVehicleList',
+    method: 'post',
+    data: {
+      deptId,
+      begintime,
+      endtime,
+      current,
+      size,
+      areaName,
+      cheliangzhuangtai
+    },
   });
 };

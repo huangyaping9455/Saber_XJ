@@ -24,7 +24,8 @@
           <span
             slot="title"
             :class="{ 'el-menu--display': collapse && first }"
-          >{{ generateTitle(item) }}</span>
+            >{{ generateTitle(item) }}</span
+          >
         </template>
         <template v-for="(child, cindex) in item[childrenKey]">
           <el-menu-item
@@ -143,4 +144,3 @@ export default {
   },
 };
 </script>
-

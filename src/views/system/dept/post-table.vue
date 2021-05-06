@@ -2,6 +2,7 @@
   <div v-if="ISLOAD" v-show="state.isPost || state.isDept" class="post-table">
     <!-- 表格-岗位人员 -->
     <avue-crud
+    ref="form"
       v-model="formData"
       :table-loading="tableLoading"
       :data="tableData"
@@ -14,6 +15,7 @@
       @sort-change="sortChange"
       @on-load="onLoad"
       @refresh-change="refreshChange"
+      :before-open="beforeOpen"
     >
       <template slot="menu" slot-scope="{ row }">
         <el-button
@@ -33,14 +35,14 @@
 <script>
 import { getList } from "@/api/basics";
 import postTree from "./post-tree";
-import basics from "@/mixins/basics";
+import basicsdept from "@/mixins/basicsdept";
 // import basic from "./form-mixin";
 export default {
   name: "post-table",
   components: {
     postTree,
   },
-  mixins: [basics],
+  mixins: [basicsdept],
   props: {
     node: Object,
     state: Object,

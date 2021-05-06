@@ -16,7 +16,13 @@
       @on-load="onLoad"
     >
       <template slot-scope="{}" slot="menu">
-        <el-button size="small" type="primary" @click.native="tip()" style="width:4rem;">{{status}}</el-button>
+        <el-button
+          size="small"
+          type="primary"
+          @click.native="tip()"
+          style="width:4rem;"
+          >{{ status }}</el-button
+        >
       </template>
     </avue-crud>
   </basic-container>
@@ -170,7 +176,7 @@ export default {
             label: "状态",
             prop: "isdeleted",
             type: "text",
-            // dicUrl: "/api/blade-anbiao/anbiao/appVersionInfo/update",
+            // dicUrl: "/api/blade-platform/platform/appVersionInfo/update",
             // dicMethod: "post",
             // dicQuery: {
             //   isdeleted: "启用",
@@ -330,5 +336,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

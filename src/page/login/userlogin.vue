@@ -52,9 +52,12 @@
         type="primary"
         size="small"
         class="login-submit"
+        :disabled="subDisabled"
         @click.native.prevent="handleLogin"
-        >{{ $t("login.submit") }}</el-button
       >
+        <!-- <span v-if="maxtime >= 0">{{ submsg }}</span> -->
+        <span>{{ $t("login.submit") }}</span>
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -68,6 +71,8 @@ export default {
   data() {
     return {
       verCode: "",
+      subDisabled: false,
+      submsg: "",
       loginForm: {
         vercode: "",
         username: "",
@@ -84,6 +89,7 @@ export default {
         ],
       },
       passwordType: "password",
+      maxtime: 10,
     };
   },
   computed: {
@@ -91,12 +97,14 @@ export default {
   },
   mounted() {
     this.getVerCode();
+    // this.timerCount();
     if (this.$dev) {
       this.loginForm.username = "admin";
       this.loginForm.password = "mxcx2019";
     }
   },
   methods: {
+    // 获取验证码
     getVerCode() {
       verificationCode().then((res) => {
         this.verCode = res.data.data;
@@ -107,15 +115,44 @@ export default {
         ? (this.passwordType = "password")
         : (this.passwordType = "");
     },
+    // 倒计时
+    CountDown() {
+      if (this.maxtime >= 0) {
+        this.subDisabled = true;
+        let minutes = Math.floor(this.maxtime / 60);
+        let seconds = Math.floor(this.maxtime % 60);
+        this.submsg = "请在" + minutes + "分" + seconds + "秒后重新登录";
+        // console.log(this.submsg);
+        // if (this.maxtime == 5 * 60) alert("还剩5分钟");
+        --this.maxtime;
+      } else {
+        clearInterval(this.timerCount());
+        this.subDisabled = false;
+        // console.log("时间到，结束!");
+      }
+    },
+    // 倒计时定时器
+    timerCount() {
+      let _this = this;
+      let timecount = setInterval(function() {
+        _this.CountDown();
+      }, 1000);
+      return timecount;
+    },
+    // 登录
     handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.$store
             .dispatch("LoginByUsername", this.loginForm)
-            .then(() => {
+            .then((res) => {
               this.$router.push({ path: this.tagWel.value });
             })
-            .catch(() => {})
+            .catch((rej) => {
+              // if (rej == "Error: 账户或密码错误,您还有2次登录机会") {
+              //   this.subDisabled = true;
+              // }
+            })
             .finally(() => {
               this.getVerCode();
             });

@@ -13,23 +13,21 @@ const getMockKey = (...mockDic) => {
     dicData,
     tip: '该字段在表单中的模拟数据类型',
     tipPlacement: 'left',
-    rules: [
-      {
-        required: true,
-        message: '请选择正确的模拟项',
-        trigger: 'submit',
-        regx: (value) => {
-          return dicData.find((item) => item.value == value) !== undefined;
-        },
-        validator: (rule, value, callback) => {
-          if (rule.regx && !rule.regx(value)) {
-            callback(new Error(rule.message));
-          } else {
-            callback();
-          }
+    rules: [{
+      required: true,
+      message: '请选择正确的模拟项',
+      trigger: 'submit',
+      regx: (value) => {
+        return dicData.find((item) => item.value == value) !== undefined;
+      },
+      validator: (rule, value, callback) => {
+        if (rule.regx && !rule.regx(value)) {
+          callback(new Error(rule.message));
+        } else {
+          callback();
         }
       }
-    ]
+    }]
   };
 };
 const mockOther = Object.values(mockType).filter((item) => item.value != 'dic');
@@ -60,13 +58,11 @@ const dicKey = {
   span: 24,
   tip: '调用字典接口需要传递的参数',
   tipPlacement: 'left',
-  rules: [
-    {
-      required: true,
-      message: '字典参数必填',
-      trigger: 'submit'
-    }
-  ]
+  rules: [{
+    required: true,
+    message: '字典参数必填',
+    trigger: 'submit'
+  }]
 };
 
 const placeholder = {
@@ -89,8 +85,7 @@ const multiple = {
 };
 
 // 不同的 type 类型对应不同的配置项
-export default () => [
-  {
+export default () => [{
     label: '输入框 - input',
     value: 'input',
     config: [
@@ -193,29 +188,25 @@ export default () => [
   {
     label: '附件框 - upload',
     value: 'upload',
-    config: [
-      {
+    config: [{
         label: '上传表名',
         prop: 'table',
         type: 'input',
         span: 24,
         tip: '上传附件的的表名称',
         tipPlacement: 'left',
-        rules: [
-          {
-            required: true,
-            message: '上传表名必填',
-            trigger: 'submit'
-          }
-        ]
+        rules: [{
+          required: true,
+          message: '上传表名必填',
+          trigger: 'submit'
+        }]
       },
       {
         label: '上传框类型',
         prop: 'listType',
         type: 'select',
         span: 24,
-        dicData: [
-          {
+        dicData: [{
             label: '按钮',
             value: 'file'
           },
@@ -228,13 +219,11 @@ export default () => [
             value: 'picture-card'
           }
         ],
-        rules: [
-          {
-            required: true,
-            message: '上传框类型必填',
-            trigger: 'submit'
-          }
-        ]
+        rules: [{
+          required: true,
+          message: '上传框类型必填',
+          trigger: 'submit'
+        }]
       },
       {
         label: '上传提示',
@@ -243,13 +232,11 @@ export default () => [
         span: 24,
         tip: '上传附件中的提示信息',
         tipPlacement: 'left',
-        rules: [
-          {
-            required: true,
-            message: '上传提示必填',
-            trigger: 'submit'
-          }
-        ]
+        rules: [{
+          required: true,
+          message: '上传提示必填',
+          trigger: 'submit'
+        }]
       },
 
       {

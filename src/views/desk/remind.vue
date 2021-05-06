@@ -87,21 +87,21 @@
         <el-table-column align="center" fixed="right" label="操作" width="230">
           <template slot-scope="scope">
             <el-button
-              type="primary"
+              type="text"
               @click="viewRow(scope.$index, tableData)"
               size="small"
             >
               查看
             </el-button>
             <el-button
-              type="success"
+              type="text"
               @click="updateRow(scope.$index, tableData)"
               size="small"
             >
               编辑
             </el-button>
             <el-button
-              type="danger"
+              type="text"
               @click="deleteRow(scope.$index, tableData)"
               size="small"
             >
@@ -227,9 +227,10 @@ export default {
     // 列表数据
     onLoad() {
       this.loading = true;
-      getallyujing().then((res) => {
+      let deptId = this.$store.getters.deptId;
+      getallyujing(deptId).then((res) => {
         this.loading = false;
-        const data = res.data.data;
+        const data = res.data.data.records;
         this.total = data.length;
         this.tableData = data;
       });

@@ -1,5 +1,5 @@
 <template>
-  <basic-container>
+  <basic-container class="drive">
     <div
       class="operation-model"
       :class="{ heightTop: clientHeight }"
@@ -7,7 +7,7 @@
     >
       <el-upload
         style="
-          margin-left: 5.85rem;
+          margin-left: 5.7rem;
           width: auto;
           display: flex;
           margin-top: -1.2rem;
@@ -15,30 +15,31 @@
         :action="baseUrl + '/blade-platform/platform/jiashiyuan/driverImport'"
         :data="pdata"
         name="file"
+        ref="upload"
         :headers="headers"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :before-remove="beforeRemove"
+        :show-file-list="false"
+        :before-upload="beforeUpload"
         :on-change="onChange"
-        :limit="1"
-        :on-exceed="handleExceed"
+        :auto-upload="autoUpload"
+        :on-success="uploadSuccess"
+        :limit="100"
         :file-list="fileList"
       >
         <el-button size="small" type="primary">
           <i class="el-icon-download" />导入
-        </el-button>
-        <el-button size="small" type="primary" @click="DowInfo">
-          <i class="el-icon-upload" />下载模板
         </el-button>
       </el-upload>
       <div
         style="
           display: flex;
           margin-top: -1.2rem;
-          margin-left: 17.1rem;
+          margin-left: 10.6rem;
           position: absolute;
         "
       >
+        <el-button size="small" type="primary" @click="DowInfo">
+          <i class="el-icon-upload" />下载模板
+        </el-button>
         <el-button
           size="small"
           type="primary"
@@ -49,7 +50,7 @@
         </el-button>
         <el-input
           v-model="driveSearchChange"
-          placeholder="请输入搜索内容"
+          placeholder="请输入驾驶员姓名"
           style="width: 11rem; margin-left: 0.6rem"
         ></el-input>
         <el-button
@@ -68,6 +69,7 @@
       :data="tableData"
       :page="page"
       :option="option"
+      :before-open="beforeOpen"
       @row-del="rowDel"
       @row-update="rowUpdate"
       @row-save="rowSave"
@@ -76,13 +78,6 @@
       @refresh-change="refreshChange"
     >
       <template slot-scope="scope" slot="menu">
-        <!-- <el-button
-          icon="el-icon-tickets"
-          :type="scope.type"
-          :size="scope.size"
-          @click="JSYVehicle(scope)"
-          >绑定车辆</el-button
-        > -->
         <el-button
           icon="el-icon-refresh-right"
           :type="scope.type"
@@ -92,28 +87,6 @@
         >
       </template>
     </avue-crud>
-    <!-- <el-dialog
-      title="绑定车辆"
-      :visible.sync="vehicleDialogVisible"
-      :destroy-on-close="true"
-      :center="true"
-      width="30%"
-    >
-      <el-table
-        :data="vehicletableData"
-        border
-        v-loading="vehicleLoading"
-        height="342"
-        style="width: 100%"
-      >
-        <el-table-column prop="cheliangpaizhao" align="center" label="车辆牌照">
-        </el-table-column>
-        <el-table-column prop="chepaiyanse" align="center" label="车牌颜色">
-        </el-table-column>
-        <el-table-column prop="shiyongxingzhi" align="center" label="使用性质">
-        </el-table-column>
-      </el-table>
-    </el-dialog> -->
     <el-dialog
       title="重置密码"
       :visible.sync="resetDialogVisible"
@@ -132,20 +105,29 @@
         >
       </span>
     </el-dialog>
+    <template>
+      <!-- 导入 验证弹框 -->
+      <DriverImport
+        ref="driverMsgImport"
+        :exceljson="exceljson"
+        @refreshChange="refreshChange"
+      ></DriverImport>
+    </template>
   </basic-container>
 </template>
 
 <script>
-import basics from "@/mixins/basics";
-// import store from "@/store/";
+import XLSX from "xlsx";
+import driver from "@/mixins/driver";
 import { getToken } from "@/util/auth";
-// import request from "@/router/axios";
 import axios from "axios";
 import { getJSYByVehicle, resetPassword } from "@/api/dept/noticelist";
 import { export_json_to_excel } from "../vehicle/Export2Excel";
+import DriverImport from "../vehicle/vehicleInfo/driverImport";
 export default {
   name: "driver",
-  mixins: [basics],
+  mixins: [driver],
+  components: { DriverImport },
   data() {
     return {
       exportLoading: false,
@@ -153,21 +135,19 @@ export default {
         "blade-auth": "Bearer " + getToken(),
       },
       fileList: [],
+      // 上传 附加参数
       pdata: {
-        // deptId: "",
-        // deptName: ""
+        userId: this.$store.getters.userInfo.userId,
+        userName: this.$store.getters.userInfo.userName,
       },
-      // baseUrl: "http://60.171.241.126:8200",
       baseUrl: "/api",
-      // baseUrl: "http://36.133.38.92:8200",
       status: true,
       clientHeight: false,
-      // vehicleDialogVisible: false,
       resetDialogVisible: false,
-      // vehicletableData: [],
       resetmima: "",
-      // vehicleLoading: false,
       resetLoading: false,
+      exceljson: "",
+      autoUpload: false,
     };
   },
   created() {
@@ -178,44 +158,90 @@ export default {
     });
   },
   mounted() {
-    this.INIT();
+    this.INIT("/daily/driver/driver");
   },
   methods: {
-    handleRemove(file, fileList) {},
-    handlePreview(file) {},
-    handleExceed(files, fileList) {},
-    beforeRemove(file, fileList) {},
     onChange(files, fileList) {
+      this.$refs.driverMsgImport.driverDialogVisible = true;
+      this.$refs.upload.submit();
+      this.$refs.driverMsgImport.tableUploadLoading = true;
       if (files.status === "ready") {
         return;
       }
       if (this.status) {
         this.status = false;
         if (files.status === "success") {
-          this.$message.success(files.response.msg);
+          this.$refs.driverMsgImport.tableUploadLoading = false;
+          this.fileList = fileList.slice(1);
         } else {
-          this.$message.warning("导入失败");
+          this.$message.error("导入失败,请校验模板数据···");
+          this.$refs.driverMsgImport.disa = true;
+          this.fileList = fileList.slice(1);
+          this.$refs.driverMsgImport.tableUploadLoading = false;
         }
         setTimeout(() => {
           this.status = true;
-        }, 1500);
+        }, 500);
       }
     },
-    // 绑定车辆
-    // JSYVehicle(data) {
-    //   this.vehicleDialogVisible = true;
-    //   this.vehicleLoading = true;
-    //   getJSYByVehicle(data.row.id).then((res) => {
-    //     if (res.data.code == 200) {
-    //       this.vehicleLoading = false;
-    //       this.vehicletableData = res.data.data;
-    //     } else {
-    //       this.vehicleLoading = false;
-    //       this.$message.error(res.data.msg);
-    //       this.vehicletableData = [];
-    //     }
-    //   });
-    // },
+    // 上传前得方法
+    beforeUpload(file) {
+      // 将表格数据转化为json格式
+      const fileReader = new FileReader();
+      fileReader.onload = (ev) => {
+        try {
+          const data = ev.target.result;
+          const workbook = XLSX.read(data, {
+            type: "binary", // 以字符编码的方式解析
+          });
+          const exlname = workbook.SheetNames[0]; // 取第一张表
+          const exl = XLSX.utils.sheet_to_json(workbook.Sheets[exlname]); // 生成json表格内容
+          this.exceljson = JSON.stringify(exl);
+        } catch (e) {
+          this.$message.error("出错了···");
+          return false;
+        }
+      };
+      fileReader.readAsBinaryString(file);
+    },
+
+    // 上传校验 成功
+    uploadSuccess(res) {
+      this.$refs.driverMsgImport.tableUploadLoading = false;
+      this.$refs.driverMsgImport.tableDialogList = res.data;
+      for (let i in res.data) {
+        if (res.data[i].msg !== "") {
+          this.$refs.driverMsgImport.tableDialogList[
+            i
+          ].msg2 = require("A/icon/no.png");
+        } else {
+          this.$refs.driverMsgImport.tableDialogList[
+            i
+          ].msg2 = require("A/icon/yes.png");
+        }
+      }
+      if (res.code == 200) {
+        this.$refs.driverMsgImport.disa = false;
+        this.$message.success("数据验证成功···");
+      } else {
+        this.$refs.driverMsgImport.disa = true;
+        this.$message.error("导入数据有误，请重新校验···");
+        this.$refs.driverMsgImport.dialogMessage = res.msg;
+      }
+    },
+    // 弹出框beforeopen
+    beforeOpen(done, type) {
+      if (type === "view") {
+        for (let i in this.FIELD) {
+          this.FIELD[i].disabled = true;
+        }
+      } else {
+        for (let j in this.FIELD) {
+          this.FIELD[j].disabled = false;
+        }
+      }
+      done();
+    },
     // 重置密码 弹出层
     JSYreset(data) {
       this.resetmima = data.row;
@@ -304,19 +330,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.operation-model {
-  display: flex;
-  position: relative;
-  top: 83px;
-  // left: 1vw;
-  z-index: 999;
-  .el-button {
-    cursor: pointer;
+.drive {
+  padding: 0 15px;
+  .operation-model {
+    display: flex;
+    position: relative;
+    top: 33px;
+    left: 4px;
+    z-index: 999;
+    .el-button {
+      cursor: pointer;
+    }
   }
 }
-// .heightTop {
-//   top: 116px;
-// }
 </style>
 <style>
 .el-table__row {

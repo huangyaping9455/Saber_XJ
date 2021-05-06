@@ -36,7 +36,7 @@ export default {
   width: 100%;
   height: 100%;
   background: #fff;
-  padding: 0 15px;
+  padding: 1rem;
 }
 .__rail-is-vertical {
   z-index: 9999;

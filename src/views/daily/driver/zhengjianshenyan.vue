@@ -1,5 +1,20 @@
 <template>
   <basic-container>
+    <!-- 按钮组 -->
+    <div class="zhengjianshenyan">
+      <el-button type="primary" icon="el-icon-download">导入</el-button>
+      <el-button
+        type="primary"
+        icon="el-icon-upload2"
+        @click="befoExport"
+        :loading="exportLoading"
+        >导出</el-button
+      >
+      <el-button type="primary" icon="el-icon-search" @click="searchShow"
+        >查询</el-button
+      >
+    </div>
+    <!-- 列表 -->
     <avue-crud
       v-if="ISLOAD"
       v-model="formData"
@@ -7,6 +22,7 @@
       :data="tableData"
       :page="page"
       :option="option"
+      :before-open="beforeOpen"
       @row-del="rowDel"
       @row-update="rowUpdate"
       @row-save="rowSave"
@@ -15,22 +31,116 @@
       @sort-change="sortChange"
       @refresh-change="refreshChange"
     ></avue-crud>
+    <!-- 查询 弹出框 -->
+    <search-dialog ref="searchdialog" @getList="getList"></search-dialog>
   </basic-container>
 </template>
- 
+
 <script>
-import basics from '@/mixins/basics';
+import zhengjian from "@/mixins/zhengjian";
+import { getList } from "@/api/basics";
+import { export_json_to_excel } from "../vehicle/Export2Excel";
+import searchDialog from "./searchDialog";
 export default {
-  name: 'zhengjianshenyan',
-  mixins: [basics],
+  name: "zhengjianshenyan",
+  mixins: [zhengjian],
+  components: {
+    searchDialog,
+  },
   data() {
-    return {};
+    return {
+      exportLoading: false,
+    };
   },
   mounted() {
-    this.INIT();
-  }
+    this.INIT("/daily/driver/zhengjianshenyan");
+  },
+  methods: {
+    // 查询 显示
+    searchShow() {
+      this.$refs.searchdialog.searchVisible = true;
+    },
+    //  导出表格
+    befoExport() {
+      this.exportLoading = true;
+      const api = this.CONFIG.viewModel;
+      if (!api) return;
+      let params = {
+        deptId: this.deptId,
+        current: 1,
+        size: 10,
+        ...this.$refs.searchdialog.searchMsg,
+      };
+      getList(api, params).then((res) => {
+        if (res.data.success == true) {
+          res.data.data = res.data.data.records.map((el, index) => {
+            return {
+              ...el,
+              index: index + 1,
+            };
+          });
+          this.export2Excel(res.data.data);
+          this.exportLoading = false;
+        } else {
+          this.$message.error(err);
+        }
+      });
+    },
+    //处理下载数据
+    formatJson(filterVal, jsonData) {
+      return jsonData.map((v) => filterVal.map((j) => v[j]));
+    },
+    export2Excel(list) {
+      require.ensure([], () => {
+        const multiHeader2 = [
+          "单位名称",
+          "驾驶员姓名",
+          "证件名称",
+          "审验有效期",
+          "审验机构",
+          "是否合格",
+          "审验日期",
+        ];
+        const filterVal = [
+          "deptName",
+          "jiashiyuanxingming",
+          "zhengjianmingcheng",
+          "shenyanyouxiaoqi",
+          "shenyanjigou",
+          "shifouhege",
+          "shenyanriqi",
+        ];
+        const merges = [
+          "A1:A2",
+          "B1:B2",
+          "C1:C2",
+          "D1:D2",
+          "E1:E2",
+          "F1:F2",
+          "G1:G2",
+        ];
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel({
+          multiHeader2,
+          header: multiHeader2,
+          data,
+          filename: "证件审验",
+          merges,
+        });
+      });
+    },
+  },
 };
 </script>
- 
-<style lang="scss" >
+<style lang="scss" scoped>
+.zhengjianshenyan {
+  position: absolute;
+  top: 0;
+  left: 5.85rem;
+  display: flex;
+  z-index: 10;
+  /deep/ .el-button:last-of-type {
+    margin-left: 0.7rem;
+  }
+}
 </style>

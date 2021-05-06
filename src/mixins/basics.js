@@ -18,7 +18,13 @@ import {
   update,
   remove,
   removeFiles,
-} from "@/api/basics";
+}
+from "@/api/basics";
+import {
+  getByIdDeptList,
+  getSheng
+}
+from "@/api/dept/productList";
 // 定义全局变量 获取省市县id
 let provinceId;
 let provinceName;
@@ -65,10 +71,10 @@ export default {
         order: 0,
       },
       page: {
-        pageSizes: [10, 20, 30, 50],
+        pageSizes: [20, 30, 50, 100],
         total: 10,
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 20,
       },
     };
   },
@@ -93,26 +99,29 @@ export default {
         ...(this.iframeOption || {}),
       };
       let baseOption = {
-        title: this.$store.getters.tag.label,
-        dialogFullscreen: true,
-        dialogHeight: "100%",
+        // title: this.$store.getters.tag.label,
+        dialogFullscreen: false,
+        dialogHeight: 600,
+        dialogWidth: "75%",
         border: true,
         viewBtn: true,
-        submitBtn: true,
-        emptyBtn: true,
+        submitBtn: false,
+        emptyBtn: false,
+        selection: true,
+        reserveSelection: false,
+        tip: false,
         // excelBtn: true,
         searchBtn: false,
-        height: 666,
-        selection: true,
-        tip: false,
-        reserveSelection: false,
+        // height: 666,
+        height: "auto",
+        calcHeight: 85,
         // maxHeight: 700,
         // menuPosition: "right",
         // searchGutter: "160",
         searchShow: false,
-        labelWidth: 120,
+        labelWidth: 125,
         labelPosition: "left",
-        menuWidth: 250,
+        menuWidth: 320,
         ...(this.baseOption || {}),
         ...(isIframe ? iframeOption : {}),
       };
@@ -185,7 +194,6 @@ export default {
         postId,
         current: page.currentPage,
         size: page.pageSize,
-        // size: 0,
         jiashiyuanxingming: this.driveSearchChange,
         // cheliangpaizhao: this.tablechepai,
         // deptName: this.tableDeptName,
@@ -218,7 +226,10 @@ export default {
         this.tableLoading = false;
         if (JSON.stringify(data) == "{}") return;
         this.page.total = data.total;
-        this.tableData = data.records.map((item) => this.receiveHandle(item));
+        this.page.currentPage = data.current;
+        // this.tableData = data.records.map((item) => this.receiveHandle(item));
+        this.tableData = this.receiveHandle(data.records);
+        // this.tableData = data.records;
       });
     },
     // change事件 省 data：省级选中的值
@@ -369,32 +380,40 @@ export default {
     // 搜索触发器
     searchChange() {
       this.getList();
-      // this.tableLoading = true;
-      // let data = {
-      //   jiashiyuanxingming: this.driveSearchChange,
-      //   cheliangpaizhao: this.tableSearch,
-      //   deptName: this.tableDeptName,
-      //   current: this.current,
-      //   deptId: this.deptId,
-      //   size: this.size,
-      // };
-      // const api = this.CONFIG.viewModel;
-      // getList(api, data).then((res) => {
-      //   let data = res.data.data;
-      //   this.tableLoading = false;
-      //   this.page.total = data.total;
-      //   this.tableData = data.records.map((item) => this.receiveHandle(item));
-      // });
     },
     // 刷新触发器
     refreshChange() {
-      this.getList();
+      this.getList(this.page.currentPage = 1);
     },
     // 排序触发器
     sortChange(sort) {
       this.tableSort.orderColumn = sort.prop;
       this.tableSort.order = sort.order === "descending" ? 0 : 1;
       this.getList();
+    },
+    // 弹出框beforeopen
+    beforeOpen(done, type) {
+      if (type === "view") {
+        for (let i in this.FIELD) {
+          this.FIELD[i].disabled = true;
+        }
+      } else {
+        for (let j in this.FIELD) {
+          this.FIELD[j].disabled = false;
+        }
+      }
+      if (type === "edit" || type === "view") {
+        this.FIELD.deptName.disabled = true;
+        this.FIELD.cheliangpaizhao.disabled = true;
+        this.FIELD.chepaiyanse.disabled = true;
+        this.FIELD.zongduanid.disabled = true;
+      } else {
+        this.FIELD.deptName.disabled = false;
+        this.FIELD.cheliangpaizhao.disabled = false;
+        this.FIELD.chepaiyanse.disabled = false;
+        this.FIELD.zongduanid.disabled = false;
+      }
+      done();
     },
     // 设置源数据
     setOriginData(data, isDeepClone = true) {
@@ -424,9 +443,10 @@ export default {
       let newData = Object.assign({}, data);
       this.uploadKeys.forEach((key) => {
         let ids = "";
-        let item = newData[key];
-        if (!item) return;
-        if (item.length && item.length != 0) {
+        // let item = newData[key];
+        // if (!item) return;
+        if (!newData[key]) return;
+        if (newData[key].length && newData[key].length != 0) {
           newData[key].forEach((file) => {
             ids += `${file.url.split("/").pop()},`;
           });
@@ -471,15 +491,19 @@ export default {
         row.zongduanid = this.formData.zongduanid.replace(/(^\s*)|(\s*$)/g, "");
       }
       // 新增 加省市县 字段
-      if (this.formData.jigouleixing == "qiye" || this.formData.jigouleixing == "geti" || this.formData.jigouleixing == "qita") {
-        this.formData.province = provinceId;
-        this.formData.city = cityId;
-        this.formData.country = countryId;
-      } else {
-        this.formData.province = provinceName;
-        this.formData.city = cityName;
-        this.formData.country = countryName;
+      // if (this.formData.jigouleixing == "qiye" || this.formData.jigouleixing == "geti" || this.formData.jigouleixing == "qita") {
+      //   this.formData.province = provinceId;
+      //   this.formData.city = cityId;
+      //   this.formData.country = countryId;
+      // } else {
+      //   this.formData.province = provinceName;
+      //   this.formData.city = cityName;
+      //   this.formData.country = countryName;
+      // }
+      if (row.area !== undefined) {
+        delete row.area;
       }
+      row.deptId = row.deptName;
       insert(this.CONFIG.insertModel, this.sendHandle(row)).then((res) => {
         this.$message({
           type: "success",
@@ -507,15 +531,22 @@ export default {
         row.zongduanid = this.formData.zongduanid.replace(/(^\s*)|(\s*$)/g, "");
       }
       // 修改 加 省市县字段
-      if (this.formData.jigouleixing == "qiye" || this.formData.jigouleixing == "geti" || this.formData.jigouleixing == "qita") {
-        this.formData.province = provinceId;
-        this.formData.city = cityId;
-        this.formData.country = countryId;
-      } else {
-        this.formData.province = provinceName;
-        this.formData.city = cityName;
-        this.formData.country = countryName;
+      // if (this.formData.jigouleixing == "qiye" || this.formData.jigouleixing == "geti" || this.formData.jigouleixing == "qita") {
+      //   this.formData.province = provinceId;
+      //   this.formData.city = cityId;
+      //   this.formData.country = countryId;
+      // } else {
+      //   this.formData.province = provinceName;
+      //   this.formData.city = cityName;
+      //   this.formData.country = countryName;
+      // }
+      // 修改时 删除area字段
+      if (this.CONFIG.updateModel === "/blade-platform/platform/vehicle/update") {
+        if (row.area !== undefined) {
+          delete row.area;
+        }
       }
+      // row.deptId = row.deptName;
       update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
         this.$message({
           type: "success",
@@ -566,10 +597,22 @@ export default {
         if (item.mockKey) item.mock = mockMap[item.mockKey].config;
         // 设置字段字典数据
         if (item.dicKey) {
-          item.dicData = [];
-          getDicData(item.dicKey).then((res) => {
-            item.dicData = res.data.data;
-          });
+          if (item.dicKey === "deptName") {
+            item.dicData = [];
+            getByIdDeptList(this.$store.getters.deptId).then(res => {
+              item.filterable = true;
+              item.dicData = res.data.data.map(el => {
+                el.label = el.deptName;
+                el.value = el.id;
+                return el;
+              });
+            })
+          } else {
+            item.dicData = [];
+            getDicData(item.dicKey).then((res) => {
+              item.dicData = res.data.data;
+            });
+          }
         }
         // 设置 uoload 组件参数
         if (item.type == "upload") {

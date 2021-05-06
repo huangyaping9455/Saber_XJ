@@ -11,6 +11,28 @@ export const getList = (current, size, params) => {
     },
   });
 };
+// 字典接口
+export const getAddressList = (current, size, type) => {
+  return request({
+    url: '/api/blade-system/dict/OtherTreeList',
+    method: 'post',
+    data: {
+      current,
+      size,
+      type,
+    },
+  });
+};
+// 字典接口
+export const getAdsChildrenList = (id) => {
+  return request({
+    url: '/api/blade-system/dict/RegionalismTreeList',
+    method: 'post',
+    params: {
+      id
+    },
+  });
+};
 export const remove = (ids) => {
   return request({
     url: '/api/blade-system/dict/remove',
@@ -47,9 +69,12 @@ export const getDict = (id) => {
     },
   });
 };
-export const getDictTree = () => {
+export const getDictTree = (type) => {
   return request({
-    url: '/api/blade-system/dict/tree?code=DICT',
-    method: 'get',
+    url: '/api/blade-system/dict/tree',
+    method: 'post',
+    data: {
+      type
+    }
   });
 };

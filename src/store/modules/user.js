@@ -66,14 +66,15 @@ const user = {
   actions: {
     // 根据用户名登录
     LoginByUsername({
-      commit
+      commit,
+      dispatch
     }, userInfo) {
       return new Promise((resolve, reject) => {
         loginByUsername(
           userInfo.username,
           userInfo.password,
           userInfo.vercode,
-          userInfo.status
+          userInfo.type
         ).then((res) => {
           const data = res.data.data;
           commit('SET_TOKEN', data.accessToken);

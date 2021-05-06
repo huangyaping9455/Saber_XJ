@@ -18,7 +18,7 @@
       </span>
     </div>
     <div class="top-bar__right">
-      <el-tooltip v-if="showColor" :content="$t('navbar.color')" effect="dark" placement="bottom">
+      <!-- <el-tooltip v-if="showColor" :content="$t('navbar.color')" effect="dark" placement="bottom">
         <div class="top-bar__item">
           <top-color></top-color>
         </div>
@@ -59,7 +59,7 @@
         <div class="top-bar__item">
           <i :class="isFullScren ? 'icon-tuichuquanping' : 'icon-quanping'" @click="handleScreen"></i>
         </div>
-      </el-tooltip>
+      </el-tooltip> -->
       <el-dropdown>
         <div class="menu">
           <img :src="userInfo.avatar" class="top-bar__img" />

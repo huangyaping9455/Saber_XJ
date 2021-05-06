@@ -62,7 +62,7 @@ import basic from "@/mixins/basics";
 
 export default {
   mixins: [basics, basic],
-  data: function () {
+  data: function() {
     return {
       TOKEN: "organ-config",
       // show: false

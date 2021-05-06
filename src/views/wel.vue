@@ -1,301 +1,276 @@
 <template>
-  <div>
-    <avue-data-box :option="option1"></avue-data-box>
-    <el-row :span="24">
-      <el-col :span="18">
-        <basic-container>
-          <avue-data-progress :option="option3" style="margin-bottom:20px"></avue-data-progress>
-          <avue-data-tabs :option="option"></avue-data-tabs>
-        </basic-container>
-      </el-col>
-      <el-col :span="6">
-        <basic-container>
-          <avue-data-icons :option="option2"></avue-data-icons>
-        </basic-container>
-      </el-col>
-    </el-row>
+  <div class="wel">
+    <div class="dataTabs">
+      <div class="tabs1">
+        <div class="tabs-head">
+          <span class="tabs-text">本周注册</span>
+          <div class="refresh-time">
+            <span>刷新时间: </span>
+            <span>{{day}}</span>
+          </div>
+        </div>
+        <el-divider></el-divider>
+        <div class="tabs-body">
+          <div class="tabs-body-left">
+            <div class="tabs-imgs">
+              <img src="../assets/icon/cheliang.png" alt="" srcset="" />
+              <span>车辆数</span>
+            </div>
+            <span class="tabs-num">{{ tabNum.vehicleNum }}</span>
+          </div>
+          <el-divider direction="vertical"></el-divider>
+          <div class="tabs-body-right">
+            <div class="tabs-imgs">
+              <img src="../assets/icon/qiye.png" alt="" srcset="" />
+              <span>注册企业数</span>
+            </div>
+            <span class="tabs-num">{{ tabNum.qiyeNum }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="tabs2">
+        <div class="tabs-head">
+          <span class="tabs-text">总注册数</span>
+          <div class="refresh-time">
+            <span>刷新时间: </span>
+            <span>{{day}}</span>
+          </div>
+        </div>
+        <el-divider></el-divider>
+        <div class="tabs-body">
+          <div class="tabs-body-left">
+            <div class="tabs-imgs">
+              <img src="../assets/icon/qiye.png" alt="" srcset="" />
+              <span>企业数</span>
+            </div>
+            <span class="tabs-num">{{ tabNum.qiyeZNum }}</span>
+          </div>
+          <el-divider direction="vertical"></el-divider>
+          <div class="tabs-body-right">
+            <div class="tabs-imgs">
+              <img src="../assets/icon/jiashiyuan.png" alt="" srcset="" />
+              <span>驾驶员数</span>
+            </div>
+            <span class="tabs-num">{{ tabNum.jiashiyuanZNum }}</span>
+          </div>
+          <el-divider direction="vertical"></el-divider>
+          <div class="tabs-body-right">
+            <div class="tabs-imgs">
+              <img src="../assets/icon/cheliang.png" alt="" srcset="" />
+              <span>车辆数</span>
+            </div>
+            <span class="tabs-num">{{ tabNum.vehicleZNum }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="tabs3">
+        <div class="tabs-head">
+          <span class="tabs-text">其他企业数</span>
+          <div class="refresh-time">
+            <span>刷新时间: </span>
+            <span>{{day}}</span>
+          </div>
+        </div>
+        <el-divider></el-divider>
+        <div class="tabs-body">
+          <div class="tabs-body-left">
+            <div class="tabs-imgs">
+              <img src="../assets/icon/anquan.png" alt="" srcset="" />
+              <span>安全标准化生产</span>
+            </div>
+            <span class="tabs-num">{{ tabNum.biaozhunhuaNum }}</span>
+          </div>
+          <el-divider direction="vertical"></el-divider>
+          <div class="tabs-body-right">
+            <div class="tabs-imgs">
+              <img src="../assets/icon/qita.png" alt="" srcset="" />
+              <span>未绑定地区</span>
+            </div>
+            <span class="tabs-num">{{ tabNum.weibangdingAreaNum }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <basic-container>
-      <avue-crud :option="option4" :data="data"></avue-crud>
+      <avue-crud :option="option" :data="data" :page="page" style="height:60vh;"></avue-crud>
     </basic-container>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import iframe from '@/mixins/iframe.js';
+import { mapGetters } from "vuex";
+import iframe from "@/mixins/iframe.js";
+import { selectOperational,richengIndex } from "@/api/wel";
+import dayjs from "dayjs";
 export default {
-  name: 'wel',
+  name: "wel",
   mixins: [iframe],
   data() {
     return {
+      tabNum: "",
+      day:dayjs().format('YYYY-MM-DD HH:mm'),
+      page: {
+          pageSize: 20,
+          pagerCount:1
+        },
       data: [
         {
-          rw: '这是一条工作任务',
-          nr: '这是一条很长很长很长很长很长很长很长很长很长的工作内容',
-          sj: '2019-01-01'
+          rw: "这是一条工作任务",
+          nr: "这是一条很长很长很长很长很长很长很长很长很长的工作内容",
+          sj: "2019-01-01",
         },
         {
-          rw: '这是一条工作任务',
-          nr: '这是一条很长很长很长很长很长很长很长很长很长的工作内容',
-          sj: '2019-01-01'
+          rw: "这是一条工作任务",
+          nr: "这是一条很长很长很长很长很长很长很长很长很长的工作内容",
+          sj: "2019-01-01",
         },
         {
-          rw: '这是一条工作任务',
-          nr: '这是一条很长很长很长很长很长很长很长很长很长的工作内容',
-          sj: '2019-01-01'
+          rw: "这是一条工作任务",
+          nr: "这是一条很长很长很长很长很长很长很长很长很长的工作内容",
+          sj: "2019-01-01",
         },
         {
-          rw: '这是一条工作任务',
-          nr: '这是一条很长很长很长很长很长很长很长很长很长的工作内容',
-          sj: '2019-01-01'
-        }
-      ]
+          rw: "这是一条工作任务",
+          nr: "这是一条很长很长很长很长很长很长很长很长很长的工作内容",
+          sj: "2019-01-01",
+        },
+      ],
     };
   },
   computed: {
-    ...mapGetters(['userInfo']),
-    option1() {
-      return {
-        span: 6,
-        data: [
-          {
-            title: this.$t('wel.data4.column1'),
-            count: 12332,
-            icon: 'el-icon-warning',
-            color: 'rgb(49, 180, 141)'
-           
-          },
-          {
-            title: this.$t('wel.data4.column2'),
-            count: 33,
-            icon: 'el-icon-view',
-            color: 'rgb(56, 161, 242)'
-         
-          },
-          {
-            title: this.$t('wel.data4.column3'),
-            count: 2223,
-            icon: 'el-icon-setting',
-            color: 'rgb(117, 56, 199)'
-          
-          },
-          {
-            title: this.$t('wel.data4.column4'),
-            count: 2223,
-            icon: 'el-icon-setting',
-            color: 'rgb(230, 71, 88)'
-           
-          }
-        ]
-      };
-    },
-    option3() {
-      return {
-        span: 8,
-        data: [
-          {
-            title: this.$t('wel.data3.column1'),
-            color: 'rgb(178, 159, 255)',
-            count: 32
-           
-          },
-          {
-            title: this.$t('wel.data3.column2'),
-            color: 'rgb(230, 71, 88)',
-            count: 32
-          
-          },
-          {
-            title: this.$t('wel.data3.column3'),
-            color: 'rgb(230, 71, 88)',
-            count: 32
-           
-          }
-        ]
-      };
-    },
-    option2() {
-      return {
-        span: 12,
-        data: [
-          {
-            title: this.$t('wel.data2.column1'),
-            count: 12678,
-            icon: 'el-icon-tickets'
-           
-          },
-          {
-            title: this.$t('wel.data2.column2'),
-            count: 22139,
-            icon: 'el-icon-success'
-           
-          },
-          {
-            title: this.$t('wel.data2.column3'),
-            count: 35623,
-            icon: 'el-icon-info'
-            
-          },
-          {
-            title: this.$t('wel.data2.column4'),
-            count: 16826,
-            icon: 'el-icon-message'
-           
-          }
-        ]
-      };
-    },
+    ...mapGetters(["userInfo"]),
     option() {
       return {
-        span: 8,
-        data: [
-          {
-            title: this.$t('wel.data.column1'),
-            subtitle: this.$t('wel.data.subtitle'),
-            count: 7993,
-            allcount: 10222,
-            text: this.$t('wel.data.text1'),
-            color: 'rgb(27, 201, 142)',
-            key: this.$t('wel.data.key1')
-          },
-          {
-            title: this.$t('wel.data.column2'),
-            subtitle: this.$t('wel.data.subtitle'),
-            count: 3112,
-            allcount: 10222,
-            text: this.$t('wel.data.text2'),
-            color: 'rgb(230, 71, 88)',
-            key: this.$t('wel.data.key2')
-          },
-          {
-            title: this.$t('wel.data.column3'),
-            subtitle: this.$t('wel.data.subtitle'),
-            count: 908,
-            allcount: 10222,
-            text: this.$t('wel.data.text3'),
-            color: 'rgb(56, 161, 242)',
-            key: this.$t('wel.data.key3')
-          }
-        ]
-      };
-    },
-    option4() {
-      return {
         index: true,
+        indexLabel:'序号',
+        height: "auto",
+        calcHeight: "41vh",
+        border: false,
+        addBtn: false,
+        menu: false,
+        page:true,
+        align:'center',
         column: [
           {
-            label: this.$t('wel.table.rw'),
-            prop: 'rw'
+            label: this.$t("wel.table.rw"),
+            prop: "rw",
           },
           {
             width: 500,
-            label: this.$t('wel.table.nr'),
-            prop: 'nr',
-            overHidden: true
+            label: this.$t("wel.table.nr"),
+            prop: "nr",
+            overHidden: true,
           },
           {
-            label: this.$t('wel.table.sj'),
-            prop: 'sj'
-          }
-        ]
+            label: this.$t("wel.table.sj"),
+            prop: "sj",
+          },
+        ],
       };
-    }
+    },
   },
-  methods: {}
+  mounted() {
+    this.selectOperational();
+    let _this = this;
+    setInterval(function() {
+      _this.day = dayjs().format('YYYY-MM-DD HH:mm');
+    }, 60000);
+    this.richengIndex();
+  },
+  methods: {
+    selectOperational() {
+      selectOperational(this.$store.getters.deptId).then((res) => {
+        this.tabNum = res.data.data[0];
+      });
+    },
+    richengIndex(){
+      richengIndex(dayjs().format('YYYY-MM-DD'),this.$store.getters.deptId).then(res=>{
+        this.data=res.data.data;
+      })
+    },
+  },
 };
 </script>
 
 <style scoped="scoped" lang="scss">
 .wel {
-  &__header {
-    padding: 25px 40px;
-    border-bottom: 1px solid #e8e8e8;
-    background-color: #fff;
+  padding: 1vh;
+  .dataTabs {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-  }
-
-  &__info {
-    display: flex;
-    align-items: center;
-
-    &-img {
-      border-radius: 72px;
-      display: block;
-      width: 72px;
-      height: 72px;
-
-      img {
-        width: 100%;
-        height: 100%;
-        display: block;
-      }
-    }
-
-    &-content {
-      position: relative;
-      margin-left: 24px;
-      color: rgba(0, 0, 0, 0.45);
-      line-height: 22px;
-    }
-
-    &-title {
-      font-size: 20px;
-      line-height: 28px;
-      font-weight: 500;
-      color: rgba(0, 0, 0, 0.85);
-      margin-bottom: 12px;
-    }
-
-    &-subtitle {
-      position: relative;
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.45);
-      line-height: 22px;
-    }
-  }
-
-  &__extra {
-    &-item {
-      position: relative;
-      padding: 0 32px;
-      display: inline-block;
-
-      &:last-child {
-        &::after {
-          display: none;
+    padding-bottom: 2vh;
+    // .tabs1,
+    // .tabs2,
+    // .tabs3 {
+    //   flex: 0 0 33%;
+    //   height: 20vh;
+    // }
+    .tabs1,
+    .tabs2,
+    .tabs3 {
+      background-image: url("../assets/blue.png");
+      background-size: 100% 100%;
+      color: white;
+      flex: 0 0 32.5%;
+      height: 20vh;
+      .tabs-head {
+        display: flex;
+        justify-content: space-between;
+        padding: 1vh 2vh;
+        .tabs-text {
+          font-size: 16px;
         }
       }
-
-      &:after {
-        background-color: #e8e8e8;
-        position: absolute;
-        top: 30px;
-        right: 0;
-        width: 1px;
-        height: 40px;
-        content: '';
+      .el-divider--horizontal {
+        margin: 0 4%;
+        width: 92%;
+        background-color: white;
+      }
+      .tabs-body {
+        display: flex;
+        .tabs-body-left,
+        .tabs-body-right {
+          width: 50%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 3vh 1vh;
+          line-height: 8vh;
+          .tabs-imgs {
+            display: flex;
+            height: 3vh;
+            line-height: 3vh;
+            img {
+              height: 100%;
+              width: 3vh;
+              background-color: white;
+              border-radius: 50%;
+              margin-right: 1vh;
+              padding: 0.5vh;
+            }
+            span {
+              font-size: 1.6vh;
+            }
+          }
+          .tabs-num {
+            font-size: 3.5vh;
+            font-weight: 600;
+          }
+        }
+        .el-divider--vertical {
+          height: 10vh;
+          margin: 2vh;
+          background-color: white;
+        }
       }
     }
-
-    &-title {
-      color: rgba(0, 0, 0, 0.45);
-      font-size: 14px;
-      line-height: 22px;
-      margin-bottom: 4px;
+    .tabs2 {
+      background-image: url("../assets/yellow.png");
+      background-size: 100% 100%;
     }
-
-    &-subtitle {
-      color: rgba(0, 0, 0, 0.85);
-      font-size: 30px;
-      line-height: 38px;
-      margin: 0;
-
-      span {
-        color: rgba(0, 0, 0, 0.45);
-        font-size: 20px;
-      }
+    .tabs3 {
+      background-image: url("../assets/green.png");
+      background-size: 100% 100%;
     }
   }
 }

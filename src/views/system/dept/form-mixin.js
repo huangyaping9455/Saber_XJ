@@ -1,10 +1,11 @@
-import basics from '@/mixins/basics';
+import basicsdept from '@/mixins/basicsdept';
 import $axios from "axios";
 import {
-  get
-} from 'js-cookie';
+  getSheng
+}
+from "@/api/dept/productList";
 export default {
-  mixins: [basics],
+  mixins: [basicsdept],
   data() {
     return {
       provinceId: null,
@@ -16,6 +17,7 @@ export default {
         menuBtn: false,
       },
       options1: [],
+      proviceRemark: 1,
     };
   },
   props: {
@@ -42,40 +44,125 @@ export default {
         this.emitConfig();
       }
     },
-    // 监听省级 输入框内变化
-    testdata(newData) {
-      // 定义remark 判断省市县（0）或运管局（1）
-      let remark;
-      if (newData === "qiye" || newData === "geti" || newData === "qita") {
-        remark = 1;
-        // 获取省 （企业）  
-        fetch(
-            `/api/blade-system/dept/getDeptById?deptId=1&type=0&remark=${remark}`
-          )
-          .then(function (response) {
-            return response.json();
-          })
-          .then(myJson => {
-            //console.log(myJson.data);
-            this.options1 = myJson.data;
-            //console.log(this.options1);
-          });
+    "formData.jigouleixing"(jigouleixing) {
+      if (jigouleixing === "qiye" || jigouleixing === "geti" || jigouleixing === "qita") {
+        this.proviceRemark = 1
       } else {
-        remark = 0;
-        // 获取省 （省市县）
-        fetch(
-            `/api/blade-system/dept/getDeptById?deptId=1&type=0&remark=${remark}`
-          )
-          .then(function (response) {
-            return response.json();
-          })
-          .then(myJson => {
-            //console.log(myJson.data);
-            this.options1 = myJson.data;
-            //console.log(this.options1);
-          });
+        this.proviceRemark = 0
       }
-    }
+      // 机构类型改变时 清空省市县的数据
+      if (this.formData.province !== "" || this.formData.city !== "" || this.formData.country !== "") {
+        if (this.state.title === "编辑") {
+          if (this.formData.jigouleixing !== this.formOriginData.jigouleixing) {
+            this.formData.province = "";
+            this.formData.city = "";
+            this.formData.country = "";
+          } else {
+            if (this.formData.province !== this.formOriginData.province) {
+              this.formData.province = "";
+              this.formData.city = "";
+              this.formData.country = "";
+            }
+          }
+        }
+        if (this.state.title === "新增") {
+          if (jigouleixing === "qiye" || jigouleixing === "geti" || jigouleixing === "qita") {
+            if (this.formData.province === this.formData.$province) {
+              this.formData.province = "";
+              this.formData.city = "";
+              this.formData.country = "";
+            }
+          } else {
+            if (this.formData.province !== this.formData.$province) {
+              this.formData.province = "";
+              this.formData.city = "";
+              this.formData.country = "";
+            }
+          }
+        }
+      }
+      this.FIELD.province.dicData = [];
+      getSheng(this.$store.getters.deptId, 0, this.proviceRemark).then(res => {
+        // item.cascaderItem = ["shi", "xian"];
+        this.FIELD.province.filterable = true;
+        this.FIELD.province.dicData = res.data.data.map(el => {
+          el.label = el.deptName;
+          el.value = el.id;
+          return el;
+        });
+      })
+      immediate: false
+    },
+    // 监听数据切换
+    "formData.province"(sheng) {
+      // console.log(typeof sheng);
+      // if (typeof sheng == "string") {
+      //   console.log(sheng);
+      // }
+      this.FIELD.city.dicData = [];
+      this.FIELD.country.dicData = [];
+      if (this.formData.province == "") {
+        this.formData.city = "";
+        this.formData.country = "";
+      }
+      if (this.isNumber(sheng) === false) return;
+      if (sheng != "" && sheng != undefined && sheng != null) {
+        if (this.proviceRemark === 0) {
+          this.FIELD.province.dicData.map(val => {
+            if (val.id === sheng) {
+              this.formData.province = val.deptName;
+            }
+          })
+        }
+        getSheng(sheng, 1, this.proviceRemark).then(res => {
+          this.FIELD.city.filterable = true;
+          this.FIELD.city.dicData = res.data.data.map(el => {
+            el.label = el.deptName;
+            el.value = el.id;
+            return el;
+          });
+        })
+      }
+    },
+    // 监听数据切换
+    "formData.city"(city) {
+      // console.log(city);
+      this.FIELD.country.dicData = [];
+      if (this.formData.city == "") {
+        this.formData.country = "";
+      }
+      if (this.isNumber(city) === false) return;
+      if (city != "" && city != undefined && city != null) {
+        if (this.proviceRemark === 0) {
+          this.FIELD.city.dicData.map(val => {
+            if (val.id === city) {
+              this.formData.city = val.deptName;
+            }
+          })
+        }
+        getSheng(city, 2, this.proviceRemark).then(res => {
+          this.FIELD.country.filterable = true;
+          this.FIELD.country.dicData = res.data.data.map(el => {
+            el.label = el.deptName;
+            el.value = el.id;
+            return el;
+          });
+        })
+      }
+    },
+    // 监听数据切换
+    "formData.country"(country) {
+      if (this.isNumber(country) === false) return;
+      if (country != "" && country != undefined && country != null) {
+        if (this.proviceRemark === 0) {
+          this.FIELD.country.dicData.map(val => {
+            if (val.id === country) {
+              this.formData.country = val.deptName;
+            }
+          })
+        }
+      }
+    },
   },
   methods: {
     // 获取表单数据
@@ -103,7 +190,7 @@ export default {
     toggle() {
       if (!this.show) return;
       let toggle = () =>
-        this.state.isAdd ? (this.clearsheng()&this.clearshi()&this.clearxian()&this.$refs.form.resetForm()) : this.getData();
+        this.state.isAdd ? this.$refs.form.resetForm() : this.getData();
       this.ISLOAD ? toggle() : this.INIT(this.TOKEN).then(toggle);
     },
     // 提交当前表单的状态
@@ -116,6 +203,16 @@ export default {
           ids: this.removeFileIds
         }
       });
-    }
+    },
+    // 判断是否为 数字
+    isNumber(val) {
+      let regPos = /^\d+(\.\d+)?$/; //非负浮点数
+      let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+      if (regPos.test(val) || regNeg.test(val)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   }
 };

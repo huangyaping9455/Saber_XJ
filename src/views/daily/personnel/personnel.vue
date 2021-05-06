@@ -27,8 +27,26 @@
               clearable
             ></el-input>
           </div>
+          <div class="person-head-input">
+            <span>状 态：</span>
+            <el-select v-model="zhuangtai" clearable placeholder="请选择状态">
+              <el-option
+                v-for="item in zhuangtais"
+                :key="item.value"
+                :label="item.label"
+                :value="item.label"
+              >
+              </el-option>
+            </el-select>
+          </div>
           <el-button type="primary" @click="refreshList">
             <i class="el-icon-search"></i>查询
+          </el-button>
+          <el-button type="primary" @click="enableShow">
+            <i class="el-icon-unlock"></i>启用
+          </el-button>
+          <el-button type="primary" @click="disableShow">
+            <i class="el-icon-lock"></i>禁用
           </el-button>
         </div>
         <div class="person-head-right">
@@ -53,41 +71,53 @@
         v-loading="loading"
         :height="caleHeight"
         ref="table"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column align="center" type="selection" width="30">
+        </el-table-column>
         <el-table-column
           type="index"
           align="center"
           label="序号"
           width="50"
+          :index="(current - 1) * size + 1"
         ></el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           align="center"
           prop="id"
           label="人员ID"
-          width="100"
-        ></el-table-column>
+          width="60"
+        ></el-table-column> -->
         <el-table-column
           align="center"
           prop="deptName"
           label="所属单位"
+          show-overflow-tooltip="true"
           width="270"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="name"
           label="姓名"
+          show-overflow-tooltip="true"
           width="110"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="account"
           label="登录账号"
-          width="100"
+          width="110"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="postName"
           label="人员类型"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          prop="zhuangtai"
+          label="状态"
+          width="60"
         ></el-table-column>
         <el-table-column
           align="center"
@@ -98,13 +128,15 @@
           align="center"
           prop="createTimes"
           label="创建时间"
+          show-overflow-tooltip="true"
         ></el-table-column>
         <el-table-column
           align="center"
           prop="updateTimes"
           label="操作时间"
+          show-overflow-tooltip="true"
         ></el-table-column>
-        <el-table-column fixed="right" width="200" align="center" label="操作">
+        <el-table-column fixed="right" width="130" align="center" label="操作">
           <template slot-scope="scope">
             <el-button
               type="text"
@@ -118,7 +150,7 @@
               @click="deleteRow(scope.$index, tableData)"
               size="small"
             >
-              岗位删除
+              删除
             </el-button>
           </template>
         </el-table-column>
@@ -129,10 +161,10 @@
         width="30%"
         center
       >
-        <span style="font-size:20px;text-align:center;"
-          ><i style="color:red;" class="el-icon-warning-outline"></i
-          >确定要删除吗？</span
-        >
+        <span style="font-size:20px;text-align:center;">
+          <i style="color:red;" class="el-icon-warning-outline"></i>
+          确定要删除吗？
+        </span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="trueDeleteRow">确 定</el-button>
@@ -144,13 +176,43 @@
         width="30%"
         center
       >
-        <span style="font-size:20px;text-align:center;"
-          ><i style="color:red;" class="el-icon-warning-outline"></i
-          >确定要重置密码吗？</span
-        >
+        <span style="font-size:20px;text-align:center;">
+          <i style="color:red;" class="el-icon-warning-outline"></i>
+          确定要重置密码吗？
+        </span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisibles = false">取 消</el-button>
           <el-button type="primary" @click="trueDeleteRows">确 定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="启用"
+        :visible.sync="enableDialogVisibles"
+        width="30%"
+        center
+      >
+        <span style="font-size:20px;text-align:center;">
+          <i style="color:red;" class="el-icon-warning-outline"></i>
+          确定要将选中项状态改为启用吗？
+        </span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="enableDialogVisibles = false">取 消</el-button>
+          <el-button type="primary" @click="trueEnable">确 定</el-button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        title="启用"
+        :visible.sync="disableDialogVisibles"
+        width="30%"
+        center
+      >
+        <span style="font-size:20px;text-align:center;">
+          <i style="color:red;" class="el-icon-warning-outline"></i>
+          确定要将选中项状态改为禁用吗？
+        </span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="disableDialogVisibles = false">取 消</el-button>
+          <el-button type="primary" @click="truedisable">确 定</el-button>
         </span>
       </el-dialog>
       <!-- 分页 -->
@@ -173,7 +235,9 @@ import {
   getListProson,
   Prosonremove,
   Prosonrepsd,
+  updateUserStatus,
 } from "@/api/dept/noticelist";
+import { getToken } from "@/util/auth";
 import { export_json_to_excel } from "../vehicle/Export2Excel";
 let date = new Date();
 export default {
@@ -187,22 +251,19 @@ export default {
       deptname: "",
       name: "",
       account: "",
+      zhuangtai: "",
+      zhuangtais: [
+        { value: 0, label: "启用" },
+        { value: 1, label: "禁用" },
+      ],
       caleHeight: 670,
       centerDialogVisible: false,
       centerDialogVisibles: false,
       lineData: "",
-      tableData: [
-        {
-          // id: "0",
-          // type: "王小虎",
-          // version: "上海市",
-          // createtime: "上海市",
-          // createuser: "上海市",
-          // androidurl: "上海市",
-          // iosurl: "上海市",
-          // remark: "上海市",
-        },
-      ],
+      tableData: [{}],
+      selectable: "",
+      enableDialogVisibles: false,
+      disableDialogVisibles: false,
     };
   },
   computed: {},
@@ -210,12 +271,12 @@ export default {
     this.onLoad();
     this.$nextTick(function() {
       this.caleHeight =
-        window.innerHeight - this.$refs.table.$el.offsetTop - 137;
+        window.innerHeight - this.$refs.table.$el.offsetTop - 130;
       // 监听窗口大小变化
       let self = this;
       window.onresize = function() {
         self.caleHeight =
-          window.innerHeight - self.$refs.table.$el.offsetTop - 137;
+          window.innerHeight - self.$refs.table.$el.offsetTop - 130;
       };
     });
   },
@@ -229,16 +290,22 @@ export default {
       let deptName = this.deptname;
       let account = this.account;
       let realName = this.name;
-      getListProson(deptId, current, size, deptName, account, realName).then(
-        (res) => {
-          this.loading = false;
-          const data = res.data.data;
-          this.total = data.total;
-          this.size = data.size;
-          this.current = data.current;
-          this.tableData = data.records;
-        }
-      );
+      getListProson(
+        deptId,
+        current,
+        size,
+        deptName,
+        account,
+        realName,
+        this.zhuangtai
+      ).then((res) => {
+        this.loading = false;
+        const data = res.data.data;
+        this.total = data.total;
+        this.size = data.size;
+        this.current = data.current;
+        this.tableData = data.records;
+      });
     },
     // 每页显示条数改变
     handleSizeChange(val) {
@@ -267,12 +334,15 @@ export default {
     },
     // 确认删除
     trueDeleteRow() {
-      Prosonremove(this.lineData.id).then((res) => {
-        if (res.data.code == 200) {
-          this.centerDialogVisible = false;
-          this.refreshList();
+      let bladeUser = "Bearer " + getToken();
+      updateUserStatus(this.lineData.id, "删除", bladeUser).then((res) => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.msg);
+          this.centerDialogVisible = true;
+          this.onLoad();
         } else {
-          this.$message.error("出错了");
+          this.$message.success(res.data.msg);
+          this.centerDialogVisible = true;
         }
       });
     },
@@ -284,6 +354,76 @@ export default {
           this.refreshList();
         } else {
           this.$message.error("出错了");
+        }
+      });
+    },
+    // 勾选数据变化
+    handleSelectionChange(val) {
+      this.selectable = val;
+    },
+    // 启用 显示
+    enableShow() {
+      if (this.selectable.length == 0) {
+        this.$message.warning("请先选择数据···");
+      } else {
+        let status = this.selectable.every((item) => {
+          return item.zhuangtai == "禁用";
+        });
+        if (status) {
+          this.enableDialogVisibles = true;
+        } else {
+          this.$message.warning("您选择得数据中包含‘已启用’的数据");
+        }
+      }
+    },
+    // 禁用 显示
+    disableShow() {
+      if (this.selectable.length == 0) {
+        this.$message.warning("请先选择数据···");
+      } else {
+        let status = this.selectable.every((item) => {
+          return item.zhuangtai == "启用";
+        });
+        if (status) {
+          this.disableDialogVisibles = true;
+        } else {
+          this.$message.warning("您选择得数据中包含‘已禁用’的数据");
+        }
+      }
+    },
+    // 启用 确定
+    trueEnable() {
+      let userId = [];
+      this.selectable.forEach((item) => (userId += `${item.id},`));
+      let bladeUser = "Bearer " + getToken();
+      // this.$store.getters.userInfo
+      updateUserStatus(userId, "启用", bladeUser).then((res) => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.msg);
+          this.enableDialogVisibles = false;
+          this.$refs.table.clearSelection();
+          this.onLoad();
+        } else {
+          this.$message.success(res.data.msg);
+          this.enableDialogVisibles = false;
+        }
+      });
+    },
+    // 禁用 确定
+    truedisable() {
+      let userId = [];
+      this.selectable.forEach((item) => (userId += `${item.id},`));
+      let bladeUser = "Bearer " + getToken();
+      // this.$store.getters.userInfo
+      updateUserStatus(userId, "禁用", bladeUser).then((res) => {
+        if (res.data.code === 200) {
+          this.$message.success(res.data.msg);
+          this.disableDialogVisibles = false;
+          this.$refs.table.clearSelection();
+          this.onLoad();
+        } else {
+          this.$message.success(res.data.msg);
+          this.disableDialogVisibles = false;
         }
       });
     },
@@ -325,6 +465,7 @@ export default {
           "姓名",
           "登录账号",
           "人员类型",
+          "状态",
           "手机号码",
           "创建时间",
           "操作时间",
@@ -335,6 +476,7 @@ export default {
           "name",
           "account",
           "postName",
+          "zhuangtai",
           "phone",
           "createTimes",
           "updateTimes",
@@ -348,6 +490,7 @@ export default {
           "F1:F2",
           "G1:G2",
           "H1:H2",
+          "I1:I2",
         ];
         // const list = this.goodsItems;
         const data = this.formatJson(filterVal, list);
@@ -376,16 +519,28 @@ export default {
     .person-head {
       display: flex;
       justify-content: space-between;
+      height: 33px;
       .person-head-left {
         display: flex;
+        width: auto;
         .person-head-input {
           display: flex;
           margin-right: 10px;
           span {
-            width: 50%;
             text-align: end;
             line-height: 30px;
             font-weight: 500;
+          }
+          .el-input {
+            width: 12vh;
+          }
+          .el-select {
+            width: 12vh;
+          }
+        }
+        /deep/ .el-button {
+          i {
+            margin-right: 0.2vh;
           }
         }
       }

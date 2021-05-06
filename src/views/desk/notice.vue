@@ -35,7 +35,7 @@
 <script>
 import { getList, remove, update, add, getNotice } from "@/api/dept/notice";
 import { mapGetters } from "vuex";
-
+import dayjs from "dayjs";
 export default {
   data() {
     return {
@@ -50,14 +50,18 @@ export default {
         tip: false,
         border: true,
         index: true,
+        indexLabel: "序号",
         viewBtn: true,
         selection: true,
+        height:"auto",
+        calcHeight:200,
         column: [
           {
             label: "通知标题",
             prop: "title",
-            row: true,
-            search: true,
+            row: false,
+            search: false,
+            span:12,
             rules: [
               {
                 required: true,
@@ -69,15 +73,16 @@ export default {
           {
             label: "通知类型",
             type: "select",
-            row: true,
+            row: false,
+            span:12,
             dicUrl: "/api/blade-system/dict/dictionary?code=notice",
             props: {
               label: "dictValue",
-              value: "dictKey",
+              value: "id",
             },
             slot: true,
             prop: "category",
-            search: true,
+            search: false,
             rules: [
               {
                 required: true,
@@ -90,8 +95,10 @@ export default {
             label: "通知日期",
             prop: "releaseTime",
             type: "date",
+            row:false,
             format: "yyyy-MM-dd hh:mm:ss",
             valueFormat: "yyyy-MM-dd hh:mm:ss",
+            span:12,
             rules: [
               {
                 required: true,
@@ -110,6 +117,8 @@ export default {
         ],
       },
       data: [],
+      beginTime:dayjs().subtract(1, "day").format("YYYY-MM-DD"),
+      endTime:dayjs().format( "YYYY-MM-DD"),
     };
   },
   computed: {
@@ -158,7 +167,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          return remove(row.id);
+          return remove(row.id,this.$store.getters.userInfo.userId);
         })
         .then(() => {
           this.onLoad(this.page);
@@ -188,7 +197,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          return remove(this.ids);
+          return remove(this.ids,this.$store.getters.userInfo.userId);
         })
         .then(() => {
           this.onLoad(this.page);
@@ -208,8 +217,8 @@ export default {
       }
       done();
     },
-    onLoad(page, params = {}) {
-      getList(page.currentPage, page.pageSize, params).then((res) => {
+    onLoad(page, params = {beginTime:this.beginTime,endTime:this.endTime}) {
+      getList(params,page.currentPage, page.pageSize,).then((res) => {
         const data = res.data.data;
         this.page.total = data.total;
         this.data = data.records;

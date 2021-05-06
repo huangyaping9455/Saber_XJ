@@ -44,9 +44,14 @@ router.beforeEach((to, from, next) => {
     } else {
       // 如果用户信息为空则获取用户信息，获取用户信息失败，跳转到登录页
       if (store.getters.token.length === 0) {
-        store.dispatch("FedLogOut");
-        next({
-          path: "/login"
+        // store.dispatch("FedLogOut");
+        // next({
+        //   path: "/login"
+        // });
+        store.dispatch('FedLogOut').then(() => {
+          next({
+            path: '/login'
+          });
         });
       } else {
         const value = to.query.src || to.fullPath;

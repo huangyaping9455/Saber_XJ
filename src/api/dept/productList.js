@@ -113,3 +113,69 @@ export const getfild = (file, fileld, table) => {
     },
   });
 };
+// 单位名称 下拉框数据
+export const getByIdDeptList = (deptId) => {
+  return request({
+    url: '/api/blade-system/dept/getByIdDeptList',
+    method: 'get',
+    params: {
+      deptId,
+    }
+  });
+};
+// 省 市 县
+export const getSheng = (deptId, type, remark) => {
+  return request({
+    url: '/api/blade-system/dept/getDeptById',
+    method: 'get',
+    params: {
+      deptId,
+      type,
+      remark
+    }
+  });
+};
+// 车辆牌照 下拉框数据
+export const getByIdVehicleLis = (deptId) => {
+  return request({
+    url: '/api/blade-platform/platform/vehicle/getByIdVehicleList',
+    method: 'get',
+    params: {
+      deptId,
+    }
+  });
+};
+// 驾驶员姓名 下拉框数据
+export const getByIdJiaShiYuanList = (deptId) => {
+  return request({
+    url: '/api/blade-platform/platform/jiashiyuan/getByIdJiaShiYuanList',
+    method: 'get',
+    params: {
+      deptId,
+    }
+  });
+};
+//标准化文件 删除
+export const deleteBiaozhunhuamuban = (caozuoren, caozuorenid, deptId) => {
+  return request({
+    url: '/api/blade-doc/doc/biaozhunhuamuban/deleteBiaozhunhuamuban',
+    method: 'get',
+    params: {
+      caozuoren,
+      caozuorenid,
+      deptId
+    }
+  });
+};
+//标准化文件 删除
+export const deleteSafetyProductionFile = (caozuoren, caozuorenid, deptId) => {
+  return request({
+    url: '/api/blade-doc/doc/biaozhunhuamuban/deleteSafetyProductionFile',
+    method: 'get',
+    params: {
+      caozuoren,
+      caozuorenid,
+      deptId
+    }
+  });
+};

@@ -47,7 +47,13 @@
           ></el-button>
         </el-tooltip>
       </div>
-      <el-table border :data="tableData" v-loading="loading" :height="caleHeight" ref="table">
+      <el-table
+        border
+        :data="tableData"
+        v-loading="loading"
+        :height="caleHeight"
+        ref="table"
+      >
         <el-table-column
           prop="deptName"
           label="公司名称"
@@ -90,13 +96,11 @@
           width
           align="center"
         ></el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-          align="center"
-          width="80">
+        <el-table-column fixed="right" label="操作" align="center" width="80">
           <template slot-scope="scope">
-            <el-button type="danger" @click="handleClick(scope.row)" size="small">删除</el-button>
+            <el-button type="text" @click="handleClick(scope.row)" size="small"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -115,7 +119,8 @@
       title="删除"
       :visible.sync="centerDialogVisible"
       width="30%"
-      center>
+      center
+    >
       <span>确定要删除吗？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="centerDialogVisible = false">取 消</el-button>
@@ -163,6 +168,7 @@
                       filterable
                       placeholder="请选择企业名称..."
                       @change="WJchange"
+                      clearable
                     >
                       <el-option
                         v-for="(item, index) in WJdeptNames"
@@ -173,40 +179,15 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item
-                    label="运营类型"
-                    style="display: flex"
-                    prop="yunyingleixing"
-                  >
-                    <el-select
-                      v-model="pojo.yunyingleixing"
-                      placeholder="请选择运营类型..."
-                      @change="YYleixing"
-                    >
-                      <el-option
-                        v-for="(item, index) in yunyingleixings"
-                        :label="item.label"
-                        :value="item.value"
-                        :key="index"
-                      ></el-option>
-                    </el-select>
-                  </el-form-item>
-                </div>
-              </el-form>
-              <el-form
-                style="display: flex"
-                :model="pojo"
-                :rules="rules"
-                ref="from"
-              >
-                <el-form-item
-                  label="生成目录"
+                  label="仅生成目录"
                   style="display: flex"
                   prop="WJisOnlyDir"
                 >
                   <el-select
                     v-model="pojo.WJisOnlyDir"
-                    placeholder="是否生成目录..."
+                    placeholder="是否仅生成目录..."
                     @change="WJmulu"
+                    clearable
                   >
                     <el-option
                       v-for="(item, index) in WJisOnlyDirs"
@@ -216,6 +197,34 @@
                     ></el-option>
                   </el-select>
                 </el-form-item>
+                </div>
+              </el-form>
+              <el-form
+                style="display: flex"
+                :model="pojo"
+                :rules="rules"
+                ref="from"
+              >
+                
+                  <el-form-item
+                    label="运营类型"
+                    style="display: flex"
+                    prop="yunyingleixing"
+                  >
+                    <el-select
+                      v-model="pojo.yunyingleixing"
+                      placeholder="请选择运营类型..."
+                      @change="YYleixing"
+                      clearable
+                    >
+                      <el-option
+                        v-for="(item, index) in yunyingleixings"
+                        :label="item.label"
+                        :value="item.value"
+                        :key="index"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
               </el-form>
               <el-form
                 style="display: flex; flex-direction: column"
@@ -235,6 +244,7 @@
                       filterable
                       placeholder="请选择企业名称..."
                       @change="WDchange"
+                      clearable
                     >
                       <el-option
                         v-for="(item, index) in WDdeptNames"
@@ -245,14 +255,15 @@
                     </el-select>
                   </el-form-item>
                   <el-form-item
-                    label="生成目录"
+                    label="仅生成目录"
                     style="display: flex"
                     prop="WDisOnlyDir"
                   >
                     <el-select
                       v-model="pojo.WDisOnlyDir"
-                      placeholder="是否生成目录..."
+                      placeholder="是否仅生成目录..."
                       @change="WDmulu"
+                      clearable
                     >
                       <el-option
                         v-for="(item, index) in WDisOnlyDirs"
@@ -301,6 +312,8 @@ import {
   getfild,
   getQYWDList,
   getQYWJList,
+  deleteBiaozhunhuamuban,
+  deleteSafetyProductionFile,
 } from "@/api/dept/productList";
 export default {
   data() {
@@ -308,12 +321,12 @@ export default {
       current: 1,
       size: 10,
       total: 1,
-      caleHeight:641,
+      caleHeight: 641,
       loading: false,
       submitLoading: false,
       isModalVisible: false,
-      centerDialogVisible:false,
-      WJWDdelete:"",
+      centerDialogVisible: false,
+      WJWDdelete: "",
       // 表单 :model
       pojo: {
         WJdeptName: [],
@@ -425,14 +438,16 @@ export default {
   computed: {},
   mounted() {
     this.onLoad();
-    this.$nextTick(function () {
-      this.caleHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 137;
+    this.$nextTick(function() {
+      this.caleHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 137;
       // 监听窗口大小变化
       let self = this;
       window.onresize = function() {
-        self.caleHeight = window.innerHeight - self.$refs.table.$el.offsetTop - 137
-      }
-    })
+        self.caleHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 137;
+      };
+    });
   },
   methods: {
     // 新增
@@ -591,13 +606,43 @@ export default {
       }
     },
     // 列表 删除
-    handleClick(data){
+    handleClick(data) {
       this.WJWDdelete = data;
       this.centerDialogVisible = true;
     },
     // 确认删除
-    TrueDelete(){
-      this.centerDialogVisible = false;
+    TrueDelete() {
+      if (this.WJWDdelete.leixing === "安全标准化文件") {
+        deleteBiaozhunhuamuban(
+          this.$store.getters.userInfo.userName,
+          this.$store.getters.userInfo.userId,
+          this.WJWDdelete.deptId
+        ).then((res) => {
+          if (res.data.code == 200) {
+            this.centerDialogVisible = false;
+            this.onLoad();
+            this.$message.success(res.data.msg);
+          } else {
+            this.centerDialogVisible = false;
+            this.$message.error(res.data.msg);
+          }
+        });
+      } else {
+        deleteSafetyProductionFile(
+          this.$store.getters.userInfo.userName,
+          this.$store.getters.userInfo.userId,
+          this.WJWDdelete.deptId
+        ).then((res) => {
+          if (res.data.code == 200) {
+            this.centerDialogVisible = false;
+            this.onLoad();
+            this.$message.success(res.data.msg);
+          } else {
+            this.centerDialogVisible = false;
+            this.$message.error(res.data.msg);
+          }
+        });
+      }
     },
     // 弹出框
     open() {

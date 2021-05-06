@@ -2,7 +2,7 @@
  * 全局配置文件
  */
 export default {
-  title: '安全标准化',
+  title: '安全标准化平台',
   logo: 'S',
   key: 'saber', // 配置主键,目前用于存储
   indexTitle: '运维管理平台',

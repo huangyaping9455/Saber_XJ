@@ -1,30 +1,31 @@
 import request from '@/router/axios';
 
-export const getList = (current, size, params) => {
+export const getList = (data, current, size) => {
   return request({
-    url: '/api/blade-desk/notice/list',
-    method: 'get',
-    params: {
-      ...params,
+    url: '/api/blade-platform/platform/notice/getNoticeAll',
+    method: 'post',
+    data: {
+      ...data,
       current,
       size,
     },
   });
 };
 
-export const remove = (ids) => {
+export const remove = (id, userId) => {
   return request({
-    url: '/api/blade-desk/notice/remove',
+    url: '/api/blade-platform/platform/notice/remove',
     method: 'post',
     params: {
-      ids,
+      id,
+      userId
     },
   });
 };
 
 export const add = (row) => {
   return request({
-    url: '/api/blade-desk/notice/submit',
+    url: '/api/blade-platform/platform/notice/submit',
     method: 'post',
     data: row,
   });
@@ -32,7 +33,7 @@ export const add = (row) => {
 
 export const update = (row) => {
   return request({
-    url: '/api/blade-desk/notice/submit',
+    url: '/api/blade-platform/platform/notice/update',
     method: 'post',
     data: row,
   });
@@ -40,11 +41,10 @@ export const update = (row) => {
 
 export const getNotice = (id) => {
   return request({
-    url: '/api/blade-desk/notice/detail',
+    url: '/api/blade-platform/platform/notice/detail',
     method: 'get',
     params: {
       id,
     },
   });
 };
-

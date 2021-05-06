@@ -1,5 +1,5 @@
 <template>
-  <div class="avue-contail" :class="{'avue--collapse':isCollapse}">
+  <div class="avue-contail" :class="{ 'avue--collapse': isCollapse }">
     <template v-if="isIframe">
       <router-view class="avue-view" />
     </template>
@@ -32,40 +32,40 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import tags from './tags';
-import top from './top/';
-import sidebar from './sidebar/';
-import admin from '@/util/admin';
+import { mapGetters } from "vuex";
+import tags from "./tags";
+import top from "./top/";
+import sidebar from "./sidebar/";
+import admin from "@/util/admin";
 export default {
-  name: 'index',
+  name: "index",
   components: {
     top,
     tags,
-    sidebar
+    sidebar,
   },
   data() {
     return {
-      inlaying: true
+      inlaying: true,
     };
   },
-  computed: mapGetters(['isLock', 'isCollapse', 'website', 'isIframe']),
+  computed: mapGetters(["isLock", "isCollapse", "website", "isIframe"]),
   mounted() {
     this.init();
   },
   methods: {
     showCollapse() {
-      this.$store.commit('SET_COLLAPSE');
+      this.$store.commit("SET_COLLAPSE");
     },
     // 屏幕检测
     init() {
-      this.$store.commit('SET_SCREEN', admin.getScreen());
+      this.$store.commit("SET_SCREEN", admin.getScreen());
       window.onresize = () => {
         setTimeout(() => {
-          this.$store.commit('SET_SCREEN', admin.getScreen());
+          this.$store.commit("SET_SCREEN", admin.getScreen());
         }, 0);
       };
-    }
-  }
+    },
+  },
 };
 </script>

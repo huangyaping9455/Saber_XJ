@@ -40,17 +40,17 @@ export default [{
         }, ],
     },
     {
-      path: '/appdown',
-      name: "app下载",
-      meta: {
-          down: true,
-          isAuth: false
-      },
-      component: () => import('../../views/appdown/index.vue')
+        path: '/appdown',
+        name: "app下载",
+        meta: {
+            down: true,
+            isAuth: false
+        },
+        component: () => import('../../views/appdown/index.vue')
     },
-    // {
-    //   path: '/personnel',
-    //   name: "人员信息",
-    //   component: () => import('../../views/daily/personnel/personnel.vue')
-    // }
+    {
+        path: '/schedule',
+        name: "人员信息",
+        component: () => import('../../views/desk/schedule/index.vue')
+    }
 ];

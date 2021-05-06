@@ -26,45 +26,38 @@ export const defalutValue = () => {
  * @returns {Object} {基础配置，增强配置}
  */
 export const fieldConfig = () => {
-  const baseConfig = [
-    {
+  const baseConfig = [{
       label: '字段ID',
       prop: 'prop',
       type: 'input',
       span: 24,
-      rules: [
-        {
-          required: true,
-          message: '字段ID必填',
-          trigger: 'submit'
-        }
-      ]
+      rules: [{
+        required: true,
+        message: '字段ID必填',
+        trigger: 'submit'
+      }]
     },
     {
       label: '字段名称',
       prop: 'label',
       type: 'input',
       span: 24,
-      rules: [
-        {
-          required: true,
-          message: '字段名称必填',
-          trigger: 'submit'
-        }
-      ]
+      rules: [{
+        required: true,
+        message: '字段名称必填',
+        trigger: 'submit'
+      }]
     },
     {
       label: '字段排序',
       prop: 'sort',
       type: 'number',
       span: 24,
-      rules: [
-        {
-          required: true,
-          message: '字段排序必填',
-          trigger: 'submit'
-        }
-      ],
+      rules: [{
+        required: true,
+        message: '字段排序必填',
+        trigger: 'submit'
+      }],
       tipPlacement: 'left'
     },
     {
@@ -73,17 +66,14 @@ export const fieldConfig = () => {
       type: 'select',
       span: 24,
       dicData: fieldType,
-      rules: [
-        {
-          required: true,
-          message: '字典参数必填',
-          trigger: 'submit'
-        }
-      ]
+      rules: [{
+        required: true,
+        message: '字典参数必填',
+        trigger: 'submit'
+      }]
     }
   ];
-  const intensifyConfig = [
-    {
+  const intensifyConfig = [{
       label: '栅格宽度',
       prop: 'span',
       type: 'number',
@@ -106,8 +96,7 @@ export const fieldConfig = () => {
       prop: 'tipPlacement',
       type: 'select',
       span: 24,
-      dicData: [
-        {
+      dicData: [{
           label: '上',
           value: 'top'
         },
@@ -140,8 +129,7 @@ export const fieldConfig = () => {
       prop: 'trigger',
       type: 'select',
       span: 24,
-      dicData: [
-        {
+      dicData: [{
           label: '失去焦点触发',
           value: 'blur'
         },
@@ -178,10 +166,18 @@ export const fieldConfig = () => {
       prop: 'align',
       type: 'select',
       span: 24,
-      dicData: [
-        { label: '居左', value: 'left' },
-        { label: '居中', value: 'center' },
-        { label: '居右', value: 'right' }
+      dicData: [{
+          label: '居左',
+          value: 'left'
+        },
+        {
+          label: '居中',
+          value: 'center'
+        },
+        {
+          label: '居右',
+          value: 'right'
+        }
       ],
       tip: '在列表中的对齐方式',
       tipPlacement: 'left'
@@ -315,5 +311,8 @@ export const fieldConfig = () => {
       tipPlacement: 'left'
     }
   ];
-  return { baseConfig, intensifyConfig };
+  return {
+    baseConfig,
+    intensifyConfig
+  };
 };

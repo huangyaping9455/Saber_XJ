@@ -2,7 +2,7 @@
 
 .el-menu--popup{
     .el-menu-item{
-        background-color: #20222a;
+        // background-color: #20222a;
         i{
             margin-right: 5px;
         }
@@ -38,7 +38,9 @@
     padding-top: 60px;
     height: 100%;
     position: relative;
-    background-color: #20222a;
+    // background-color: #20222a;
+    background-image: url("../assets/leftmenu.png");
+    background-size: 100% 100%;
     transition: width .2s;
     box-sizing: border-box;
     box-shadow: 2px 0 6px rgba(0,21,41,.35);
@@ -63,7 +65,9 @@
             margin-right: 5px;
         }
         i,span{
-            color:hsla(0,0%,100%,.7);
+            // color:hsla(0,0%,100%,.7);
+            color: #fff;
+            font-size: 15px;
         }
         &:hover{
             background: transparent;
@@ -81,7 +85,8 @@
                 background: #409eff;
                 position: absolute;
             }
-            background-color: rgba(0,0,0,.8);
+            // background-color: rgba(0,0,0,.8);
+            background-color: #1c7aee;
             i,span{
                 color:#fff;
             }

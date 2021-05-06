@@ -23,28 +23,29 @@
           icon="el-icon-delete"
           plain
           @click="handleDelete"
-        >删 除</el-button>
+          >删 除</el-button
+        >
       </template>
-      <template slot="roleId" slot-scope="{row}">
-        <el-tag>{{row.roleName}}</el-tag>
+      <template slot="roleId" slot-scope="{ row }">
+        <el-tag>{{ row.roleName }}</el-tag>
       </template>
-      <template slot="source" slot-scope="{row}">
+      <template slot="source" slot-scope="{ row }">
         <div style="text-align:center">
           <i :class="row.source"></i>
         </div>
       </template>
 
-      <template slot="deptId" slot-scope="{row}">
-        <el-tag>{{row.deptName}}</el-tag>
+      <template slot="deptId" slot-scope="{ row }">
+        <el-tag>{{ row.deptName }}</el-tag>
       </template>
     </avue-crud>
   </basic-container>
 </template>
 
 <script>
-import { getList, remove, update, add, getMenu } from '@/api/system/menu';
-import { mapGetters } from 'vuex';
-import iconList from '@/config/iconSvg.js';
+import { getList, remove, update, add, getMenu } from "@/api/system/menu";
+import { mapGetters } from "vuex";
+import iconList from "@/config/iconSvg.js";
 
 export default {
   data() {
@@ -54,11 +55,11 @@ export default {
       page: {
         pageSize: 10,
         currentPage: 1,
-        total: 0
+        total: 0,
       },
       option: {
         tip: false,
-        dialogWidth: '60%',
+        dialogWidth: "60%",
         tree: true,
         border: true,
         index: true,
@@ -66,230 +67,230 @@ export default {
         viewBtn: true,
         column: [
           {
-            label: '菜单名称',
-            prop: 'name',
+            label: "菜单名称",
+            prop: "name",
             search: true,
             overHidden: true,
             rules: [
               {
                 required: true,
-                message: '请输入菜单名称',
-                trigger: 'blur'
-              }
-            ]
+                message: "请输入菜单名称",
+                trigger: "blur",
+              },
+            ],
           },
           {
-            label: '路由地址',
-            prop: 'path',
+            label: "路由地址",
+            prop: "path",
             overHidden: true,
             rules: [
               {
                 required: true,
-                message: '请输入路由地址',
-                trigger: 'blur'
-              }
-            ]
+                message: "请输入路由地址",
+                trigger: "blur",
+              },
+            ],
           },
           {
-            label: '上级菜单',
-            prop: 'parentId',
-            type: 'tree',
-            dicUrl: '/api/blade-system/menu/tree',
+            label: "上级菜单",
+            prop: "parentId",
+            type: "tree",
+            dicUrl: "/api/blade-system/menu/tree",
             hide: true,
             props: {
-              label: 'title'
+              label: "title",
             },
             rules: [
               {
                 required: false,
-                message: '请选择上级菜单',
-                trigger: 'click'
-              }
-            ]
+                message: "请选择上级菜单",
+                trigger: "click",
+              },
+            ],
           },
           {
-            label: '菜单图标',
-            prop: 'source',
-            type: 'icon-select',
+            label: "菜单图标",
+            prop: "source",
+            type: "icon-select",
             slot: true,
             iconList: iconList,
             rules: [
               {
                 required: true,
-                message: '请输入菜单图标',
-                trigger: 'click'
-              }
-            ]
+                message: "请输入菜单图标",
+                trigger: "click",
+              },
+            ],
           },
           {
-            label: '菜单别名',
-            prop: 'alias',
+            label: "菜单别名",
+            prop: "alias",
             rules: [
               {
                 required: true,
-                message: '请输入菜单别名',
-                trigger: 'blur'
-              }
+                message: "请输入菜单别名",
+                trigger: "blur",
+              },
             ],
-            hide: true
+            hide: true,
           },
           {
-            label: '菜单编号',
-            prop: 'code',
+            label: "菜单编号",
+            prop: "code",
             search: true,
             rules: [
               {
                 required: true,
-                message: '请输入菜单编号',
-                trigger: 'blur'
-              }
-            ]
+                message: "请输入菜单编号",
+                trigger: "blur",
+              },
+            ],
           },
           {
-            label: '菜单排序',
-            prop: 'sort',
-            type: 'number',
+            label: "菜单排序",
+            prop: "sort",
+            type: "number",
             rules: [
               {
                 required: true,
-                message: '请输入菜单排序',
-                trigger: 'blur'
-              }
-            ]
+                message: "请输入菜单排序",
+                trigger: "blur",
+              },
+            ],
           },
           {
-            label: '菜单类型',
-            prop: 'category',
-            type: 'radio',
+            label: "菜单类型",
+            prop: "category",
+            type: "radio",
             dicData: [
               {
-                label: '菜单',
-                value: 1
+                label: "菜单",
+                value: 1,
               },
               {
-                label: '按钮',
-                value: 2
-              }
+                label: "按钮",
+                value: 2,
+              },
             ],
             hide: true,
             rules: [
               {
                 required: true,
-                message: '请选择菜单类型',
-                trigger: 'blur'
-              }
-            ]
+                message: "请选择菜单类型",
+                trigger: "blur",
+              },
+            ],
           },
 
           {
-            label: '按钮功能',
-            prop: 'action',
-            type: 'radio',
+            label: "按钮功能",
+            prop: "action",
+            type: "radio",
             dicData: [
               {
-                label: '工具栏',
-                value: 0
+                label: "工具栏",
+                value: 0,
               },
               {
-                label: '操作栏',
-                value: 1
+                label: "操作栏",
+                value: 1,
               },
               {
-                label: '工具操作栏',
-                value: 2
-              }
+                label: "工具操作栏",
+                value: 2,
+              },
             ],
             hide: true,
             rules: [
               {
                 required: true,
-                message: '请选择按钮功能',
-                trigger: 'blur'
-              }
-            ]
+                message: "请选择按钮功能",
+                trigger: "blur",
+              },
+            ],
           },
           {
-            label: '菜单缓存',
-            prop: 'keepAlive',
-            type: 'radio',
+            label: "菜单缓存",
+            prop: "keepAlive",
+            type: "radio",
             dicData: [
               {
-                label: '否',
-                value: 0
+                label: "否",
+                value: 0,
               },
               {
-                label: '是',
-                value: 1
-              }
+                label: "是",
+                value: 1,
+              },
             ],
             valueDefault: 1,
-            hide: true
+            hide: true,
           },
           {
-            label: '菜单隐藏',
-            prop: 'hideMenu',
-            type: 'radio',
+            label: "菜单隐藏",
+            prop: "hideMenu",
+            type: "radio",
             dicData: [
               {
-                label: '否',
-                value: 0
+                label: "否",
+                value: 0,
               },
               {
-                label: '是',
-                value: 1
-              }
+                label: "是",
+                value: 1,
+              },
             ],
             valueDefault: 0,
-            hide: true
+            hide: true,
           },
           {
-            label: '新窗口',
-            prop: 'isOpen',
-            type: 'radio',
+            label: "新窗口",
+            prop: "isOpen",
+            type: "radio",
             dicData: [
               {
-                label: '否',
-                value: 0
+                label: "否",
+                value: 0,
               },
               {
-                label: '是',
-                value: 1
-              }
+                label: "是",
+                value: 1,
+              },
             ],
             valueDefault: 1,
-            hide: true
+            hide: true,
           },
           {
-            label: '菜单备注',
-            prop: 'remark',
-            type: 'textarea',
+            label: "菜单备注",
+            prop: "remark",
+            type: "textarea",
             span: 24,
             minRows: 6,
-            hide: true
-          }
-        ]
+            hide: true,
+          },
+        ],
       },
-      data: []
+      data: [],
     };
   },
 
   computed: {
-    ...mapGetters(['permission']),
+    ...mapGetters(["permission"]),
     permissionList() {
       return {
         addBtn: this.vaildData(this.permission.menu_add, false),
         viewBtn: this.vaildData(this.permission.menu_view, false),
         delBtn: this.vaildData(this.permission.menu_delete, false),
-        editBtn: this.vaildData(this.permission.menu_edit, false)
+        editBtn: this.vaildData(this.permission.menu_edit, false),
       };
     },
     ids() {
       let ids = [];
-      this.selectionList.forEach(ele => {
+      this.selectionList.forEach((ele) => {
         ids.push(ele.id);
       });
-      return ids.join(',');
-    }
+      return ids.join(",");
+    },
   },
   methods: {
     rowSave(row, loading) {
@@ -297,8 +298,8 @@ export default {
         loading();
         this.onLoad(this.page);
         this.$message({
-          type: 'success',
-          message: '操作成功!'
+          type: "success",
+          message: "操作成功!",
         });
       });
     },
@@ -307,16 +308,16 @@ export default {
         loading();
         this.onLoad(this.page);
         this.$message({
-          type: 'success',
-          message: '操作成功!'
+          type: "success",
+          message: "操作成功!",
         });
       });
     },
     rowDel(row) {
-      this.$confirm('确定将选择数据删除?', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("确定将选择数据删除?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
         .then(() => {
           return remove(row.id);
@@ -324,8 +325,8 @@ export default {
         .then(() => {
           this.onLoad(this.page);
           this.$message({
-            type: 'success',
-            message: '操作成功!'
+            type: "success",
+            message: "操作成功!",
           });
         });
     },
@@ -340,13 +341,13 @@ export default {
     },
     handleDelete() {
       if (this.selectionList.length === 0) {
-        this.$message.warning('请选择至少一条数据');
+        this.$message.warning("请选择至少一条数据");
         return;
       }
-      this.$confirm('确定将选择数据删除?', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("确定将选择数据删除?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
         .then(() => {
           return remove(this.ids);
@@ -354,29 +355,28 @@ export default {
         .then(() => {
           this.onLoad(this.page);
           this.$message({
-            type: 'success',
-            message: '操作成功!'
+            type: "success",
+            message: "操作成功!",
           });
           this.$refs.crud.toggleSelection();
         });
     },
     beforeOpen(done, type) {
-      if (['edit', 'view'].includes(type)) {
-        getMenu(this.form.id).then(res => {
+      if (["edit", "view"].includes(type)) {
+        getMenu(this.form.id).then((res) => {
           this.form = res.data.data;
         });
       }
       done();
     },
     onLoad(page, params = {}) {
-      getList(page.currentPage, page.pageSize, params).then(res => {
+      getList(page.currentPage, page.pageSize, params).then((res) => {
         const data = res.data.data;
         this.data = data;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

@@ -37,7 +37,7 @@
     </span>
   </el-dialog>
 </template>
- 
+
 <script>
 import {
   tree,
@@ -115,67 +115,67 @@ export default {
           setGrant: ABTreeSave,
           show: [1, 2],
         },
-        {
-          ref: "APP",
-          label: "APP菜单",
-          loading: false,
-          load: false,
-          isKey: false,
-          data: [],
-          keys: [],
-          apiType: 4,
-          getKeys: APPTreeKeys,
-          getTree: APPTree,
-          setGrant: APPTreeSave,
-          show: [1, 2],
-        },
-        {
-          ref: "ML",
-          label: "标准化目录",
-          loading: false,
-          load: false,
-          isKey: false,
-          data: [],
-          keys: [],
-          apiType: 2,
-          params: {
-            postId: this.$store.getters.postId,
-          },
-          getKeys: MLTreeKeys,
-          getTree: MLTree,
-          setGrant: MLTreeSave,
-          show: [1, 2],
-        },
-        {
-          ref: "YJ",
-          label: "预警权限",
-          loading: false,
-          load: false,
-          isKey: false,
-          data: [],
-          keys: [],
-          params: {
-            postId: this.$store.getters.postId,
-          },
-          getKeys: YJTreeKeys,
-          getTree: YJTree,
-          setGrant: YJTreeSave,
-          show: [1],
-        },
-        {
-          ref: "FN",
-          label: "功能权限",
-          loading: false,
-          load: false,
-          isKey: false,
-          data: [],
-          keys: [],
-          apiType: 3,
-          getKeys: FNTreeKeys,
-          getTree: FNTree,
-          setGrant: FNTreeSave,
-          show: [1, 2],
-        },
+        // {
+        //   ref: "APP",
+        //   label: "APP菜单",
+        //   loading: false,
+        //   load: false,
+        //   isKey: false,
+        //   data: [],
+        //   keys: [],
+        //   apiType: 4,
+        //   getKeys: APPTreeKeys,
+        //   getTree: APPTree,
+        //   setGrant: APPTreeSave,
+        //   show: [1, 2],
+        // },
+        // {
+        //   ref: "ML",
+        //   label: "标准化目录",
+        //   loading: false,
+        //   load: false,
+        //   isKey: false,
+        //   data: [],
+        //   keys: [],
+        //   apiType: 2,
+        //   params: {
+        //     postId: this.$store.getters.postId,
+        //   },
+        //   getKeys: MLTreeKeys,
+        //   getTree: MLTree,
+        //   setGrant: MLTreeSave,
+        //   show: [1, 2],
+        // },
+        // {
+        //   ref: "YJ",
+        //   label: "预警权限",
+        //   loading: false,
+        //   load: false,
+        //   isKey: false,
+        //   data: [],
+        //   keys: [],
+        //   params: {
+        //     postId: this.$store.getters.postId,
+        //   },
+        //   getKeys: YJTreeKeys,
+        //   getTree: YJTree,
+        //   setGrant: YJTreeSave,
+        //   show: [1],
+        // },
+        // {
+        //   ref: "FN",
+        //   label: "功能权限",
+        //   loading: false,
+        //   load: false,
+        //   isKey: false,
+        //   data: [],
+        //   keys: [],
+        //   apiType: 3,
+        //   getKeys: FNTreeKeys,
+        //   getTree: FNTree,
+        //   setGrant: FNTreeSave,
+        //   show: [1, 2],
+        // },
         {
           ref: "YD",
           label: "机构异动",
@@ -419,6 +419,5 @@ export default {
   },
 };
 </script>
- 
-<style lang="scss" scoped>
-</style>
+
+<style lang="scss" scoped></style>

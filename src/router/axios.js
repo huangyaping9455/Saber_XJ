@@ -64,7 +64,10 @@ axios.interceptors.response.use(
     const status = res.data.code || 200;
     const statusWhiteList = website.statusWhiteList || [];
     const message = res.data.msg || '未知错误';
-    // console.log(res.data); //执行的接口
+    // console.log(res); //执行的接口
+    if (res.config.url === "/api/blade-auth/auth/signIn") {
+
+    }
 
     // 如果在白名单里则自行catch逻辑处理
     if (statusWhiteList.includes(status)) return Promise.reject(res);

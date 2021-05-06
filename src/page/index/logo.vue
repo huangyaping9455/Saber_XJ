@@ -10,7 +10,7 @@
         <span key="1" class="avue-logo_title">
           <div>
             <img src="img/bg/img-logo.png" width="30" alt />
-            {{website.indexTitle}}
+            {{ website.indexTitle }}
           </div>
         </span>
       </template>
@@ -51,11 +51,11 @@ export default {
   width: 240px;
   height: 64px;
   line-height: 64px;
-  background-color: #20222a;
+  // background-color: #20222a;
   font-size: 20px;
   overflow: hidden;
   box-sizing: border-box;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+  // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
   color: rgba(255, 255, 255, 0.8);
   z-index: 1024;
   &_title {
