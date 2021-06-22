@@ -370,6 +370,10 @@ export default {
         row.createtime = this.getNowFormatDate();
       }
       row.isdelete = 0;
+      if (this.nodeData.extendType == "岗位" || this.nodeData.extendType == "部门") {
+        row.deptId = this.nodeData.id;
+        row.id = this.nodeData.id;
+      }
       if (row.jigouleixing === "qiye" || row.jigouleixing === "geti" || row.jigouleixing === "qita") {
         if (row.province !== row.$province || row.province == "") {
           update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {

@@ -128,50 +128,50 @@ export default {
       }
     },
     // 获取单位名称的 value值传给车辆牌照的接口 获取车辆牌照
-    "formData.deptName": {
-      handler(val) {
-        this.FIELD.jiashiyuanxingming.dicData = [];
-        if (this.isNumber(val) === false) return;
-        if (!this.formOriginData.jiashiyuanxingming) {
-          this.formData.jiashiyuanxingming = "";
-          this.formData.xingbie = "";
-        }
-        if (val != "" && val != undefined && val != null) {
-          getByIdJiaShiYuanList(val).then((res) => {
-            this.FIELD.jiashiyuanxingming.dicData = res.data.data.map((el) => {
-              el.label = el.jiashiyuanxingming;
-              el.value = el.jiashiyuanxingming;
-              return el;
-            });
-            this.FIELD.jiashiyuanxingming.filterable = true;
-          });
-        }
-      },
-      immediate: false,
-    },
+    // "formData.deptName": {
+    //   handler(val) {
+    //     this.FIELD.jiashiyuanxingming.dicData = [];
+    //     if (this.isNumber(val) === false) return;
+    //     if (!this.formOriginData.jiashiyuanxingming) {
+    //       this.formData.jiashiyuanxingming = "";
+    //       this.formData.xingbie = "";
+    //     }
+    //     if (val != "" && val != undefined && val != null) {
+    //       getByIdJiaShiYuanList(val).then((res) => {
+    //         this.FIELD.jiashiyuanxingming.dicData = res.data.data.map((el) => {
+    //           el.label = el.jiashiyuanxingming;
+    //           el.value = el.jiashiyuanxingming;
+    //           return el;
+    //         });
+    //         this.FIELD.jiashiyuanxingming.filterable = true;
+    //       });
+    //     }
+    //   },
+    //   immediate: false,
+    // },
     // 获取车辆牌照的value值判断此车牌是否有车牌颜色
-    "formData.jiashiyuanxingming": {
-      handler(val) {
-        this.FIELD.xingbie.dicData = [];
-        if (val != "" && val != undefined && val != null) {
-          this.FIELD.jiashiyuanxingming.dicData.map(el => {
-            if (el.jiashiyuanxingming === val) {
-              this.formData.xingbie = el.xingbie;
-              this.formData.shenfenzhenghao = el.shenfenzhenghao;
-              this.formData.xingbie = el.xingbie;
-              this.formData.shoujihaoma = el.shoujihaoma;
-              if (el.xingbie !== "") {
-                this.FIELD.xingbie.dicData = [{
-                  label: el.xingbie,
-                  value: el.xingbie,
-                }];
-              }
-            }
-          })
-        }
-      },
-      immediate: false,
-    },
+    // "formData.jiashiyuanxingming": {
+    //   handler(val) {
+    //     this.FIELD.xingbie.dicData = [];
+    //     if (val != "" && val != undefined && val != null) {
+    //       this.FIELD.jiashiyuanxingming.dicData.map(el => {
+    //         if (el.jiashiyuanxingming === val) {
+    //           this.formData.xingbie = el.xingbie;
+    //           this.formData.shenfenzhenghao = el.shenfenzhenghao;
+    //           this.formData.xingbie = el.xingbie;
+    //           this.formData.shoujihaoma = el.shoujihaoma;
+    //           if (el.xingbie !== "") {
+    //             this.FIELD.xingbie.dicData = [{
+    //               label: el.xingbie,
+    //               value: el.xingbie,
+    //             }];
+    //           }
+    //         }
+    //       })
+    //     }
+    //   },
+    //   immediate: false,
+    // },
   },
   methods: {
     // 初始化

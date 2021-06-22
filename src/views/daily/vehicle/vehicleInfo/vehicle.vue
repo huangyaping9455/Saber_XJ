@@ -105,6 +105,7 @@
       <import-dialog
         ref="importdialog"
         :exceljson="exceljson"
+        :importSuccessData="importSuccessData"
         @refreshChange="refreshChange"
       ></import-dialog>
       <!-- 异动 弹框 -->
@@ -231,6 +232,7 @@ export default {
       selectionId: "",
       TerminalVisible: false,
       terminalId: "",
+      importSuccessData:[],
     };
   },
   mounted() {
@@ -305,6 +307,7 @@ export default {
         }
       }
       if (res.code == 200) {
+        this.importSuccessData=JSON.stringify(res.data);
         this.$refs.importdialog.disa = false;
         this.$message.success("数据验证成功···");
       } else {

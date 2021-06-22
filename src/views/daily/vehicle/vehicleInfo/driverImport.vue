@@ -78,6 +78,7 @@ export default {
       dialogMessage: "",
       uploadtureloading: false,
       disa: false,
+      datenow:""
     };
   },
   methods: {
@@ -88,39 +89,43 @@ export default {
       this.dialogMessage = "";
     },
     TrueClick() {
-      this.uploadtureloading = true;
-      if (this.disa == true) {
-        this.$message.error("导入信息有误,请校验···");
-      } else {
-        let formData = new FormData();
-        formData.append("userId", this.$store.getters.userInfo.userId);
-        formData.append("userName", this.$store.getters.userInfo.userName);
-        formData.append("drivers", this.exceljson);
-        let config = {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        };
-        axios({
-          url: "api/blade-platform/platform/jiashiyuan/driverImportOk",
-          method: "post",
-          data: formData,
-          config,
-        })
-          .then((res) => {
-            if (res.status === 200) {
-              this.$message.success("导入成功");
-              this.uploadtureloading = false;
-              this.driverDialogVisible = false;
-              this.tableDialogList = [];
-              this.dialogMessage = "";
-              this.$emit("refreshChange");
-            } else {
-              this.uploadtureloading = false;
-              this.$message.error(res.statusText);
-            }
+      let dateTimes=new Date().getTime();
+      if(dateTimes-this.datenow>1000){
+        this.uploadtureloading = true;
+        if (this.disa == true) {
+          this.$message.error("导入信息有误,请校验···");
+        } else {
+          let formData = new FormData();
+          formData.append("userId", this.$store.getters.userInfo.userId);
+          formData.append("userName", this.$store.getters.userInfo.userName);
+          formData.append("drivers", this.exceljson);
+          let config = {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          };
+          axios({
+            url: "api/blade-platform/platform/jiashiyuan/driverImportOk",
+            method: "post",
+            data: formData,
+            config,
           })
-          .catch(() => {
-            this.uploadtureloading = false;
-          });
+            .then((res) => {
+              if (res.status === 200) {
+                this.$message.success("导入成功");
+                this.uploadtureloading = false;
+                this.driverDialogVisible = false;
+                this.datenow=new Date().getTime();
+                this.tableDialogList = [];
+                this.dialogMessage = "";
+                this.$emit("refreshChange");
+              } else {
+                this.uploadtureloading = false;
+                this.$message.error(res.statusText);
+              }
+            })
+            .catch(() => {
+              this.uploadtureloading = false;
+            });
+        }
       }
     },
   },

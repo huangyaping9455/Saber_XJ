@@ -196,7 +196,7 @@ export default {
           });
           const exlname = workbook.SheetNames[0]; // 取第一张表
           const exl = XLSX.utils.sheet_to_json(workbook.Sheets[exlname]); // 生成json表格内容
-          this.exceljson = JSON.stringify(exl);
+          // this.exceljson = JSON.stringify(exl);
         } catch (e) {
           this.$message.error("出错了···");
           return false;
@@ -222,6 +222,7 @@ export default {
       }
       if (res.code == 200) {
         this.$refs.driverMsgImport.disa = false;
+        this.exceljson = JSON.stringify(res.data);
         this.$message.success("数据验证成功···");
       } else {
         this.$refs.driverMsgImport.disa = true;

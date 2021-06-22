@@ -1,7 +1,13 @@
 <template>
-  <avue-form v-if="ISLOAD" v-show="show" ref="form" v-model="formData" :option="option"></avue-form>
+  <avue-form
+    v-if="ISLOAD"
+    v-show="show"
+    ref="form"
+    v-model="formData"
+    :option="option"
+  ></avue-form>
 </template>
- 
+
 <script>
 import basics from "./form-mixin";
 export default {
@@ -20,6 +26,5 @@ export default {
   },
 };
 </script>
- 
-<style lang="scss" >
-</style>
+
+<style lang="scss"></style>

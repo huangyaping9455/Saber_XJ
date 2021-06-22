@@ -173,7 +173,7 @@ export default {
           method: "GET",
           params: {
             id: this.node.id,
-            deptId: 1
+            deptId: this.node.id,
           }
         }).then(res => {
           this.formData.mingcheng = res.data.data.mingcheng;

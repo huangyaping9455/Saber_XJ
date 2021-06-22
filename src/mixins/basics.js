@@ -22,7 +22,8 @@ import {
 from "@/api/basics";
 import {
   getByIdDeptList,
-  getSheng
+  getByIdVehicleLis,
+  getByIdJiaShiYuanList
 }
 from "@/api/dept/productList";
 // 定义全局变量 获取省市县id
@@ -153,6 +154,22 @@ export default {
         this.setOriginData({}, false);
       }
     },
+    "formData.deptName": {
+      handler(val) {
+        if (this.isNumber(val) === false) return;
+        if (val != "" && val != undefined && val != null) {
+          getByIdJiaShiYuanList(val).then((res) => {
+            this.FIELD.jiashiyuanxingming.dicData = res.data.data.map((el) => {
+              el.label = el.jiashiyuanxingming;
+              el.value = el.jiashiyuanxingming;
+              return el;
+            });
+            this.FIELD.jiashiyuanxingming.filterable = true;
+          });
+        }
+      },
+      immediate: false,
+    },
   },
   methods: {
     // 初始化
@@ -172,6 +189,16 @@ export default {
       return getField(this.CONFIG.viewField, this.deptId).then((res) => {
         this.FIELD = this.buildFieldMap(res.data.data);
       });
+    },
+    // 判断是否为 数字
+    isNumber(val) {
+      let regPos = /^\d+(\.\d+)?$/; //非负浮点数
+      let regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+      if (regPos.test(val) || regNeg.test(val)) {
+        return true;
+      } else {
+        return false;
+      }
     },
     // 获取数据
     getList({

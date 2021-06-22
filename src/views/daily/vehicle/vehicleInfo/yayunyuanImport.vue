@@ -1,7 +1,7 @@
-<template
-  ><el-dialog
+<template>
+  <el-dialog
     title="请确认导入信息"
-    :visible.sync="centerDialogVisible"
+    :visible.sync="driverDialogVisible"
     width="60%"
     top="10vh"
     @close="DialogQuXiao()"
@@ -30,46 +30,17 @@
       </el-table-column>
       <el-table-column prop="deptName" label="机构名称"></el-table-column>
       <el-table-column
-        prop="cheliangpaizhao"
-        label="车辆牌照"
-      ></el-table-column>
-      <el-table-column prop="chepaiyanse" label="车牌颜色"></el-table-column>
-      <el-table-column prop="shiyongxingzhi" label="使用性质"></el-table-column>
-      <el-table-column
         prop="jiashiyuanxingming"
         width="90"
-        label="驾驶员姓名"
-      ></el-table-column>
-      <el-table-column prop="xinghao" label="车辆类型"></el-table-column>
-      <el-table-column prop="changpai" label="厂牌"></el-table-column>
-      <el-table-column prop="chejiahao" label="车架号"></el-table-column>
-      <el-table-column
-        prop="yunyingshangmingcheng"
-        width="90"
-        label="运营商名称"
-      ></el-table-column>
-      <el-table-column prop="zongduanid" label="终端编号"></el-table-column>
-      <el-table-column
-        prop="yunyingshang"
-        label="4G视频地址"
-        width="90"
+        label="押运员姓名"
       ></el-table-column>
       <el-table-column
-        prop="jiashiyuandianhua"
-        width="90"
-        label="驾驶员电话"
+        prop="shenfenzhenghao"
+        label="身份证号"
       ></el-table-column>
-      <el-table-column
-        prop="yayunyuanxingming"
-        label="押运员"
-      ></el-table-column>
-      <el-table-column
-        prop="yayunyuandianhua"
-        width="90"
-        label="押运员电话"
-      ></el-table-column>
-      <el-table-column prop="chezhu" label="车主"></el-table-column>
-      <el-table-column prop="chezhudianhua" label="车主电话"></el-table-column>
+      <el-table-column prop="shoujihaoma" label="手机号码"></el-table-column>
+      <el-table-column prop="congyezigezheng" label="从业资格证号"></el-table-column>
+      <el-table-column prop="congyezhengyouxiaoqi" label="从业证有效期"></el-table-column>
     </el-table>
     <div class="dialog-message">
       验证信息：<span>{{ dialogMessage }}</span>
@@ -98,14 +69,10 @@ export default {
       type: String,
       default: true,
     },
-    importSuccessData: {
-      type: String,
-      default: true,
-    },
   },
   data() {
     return {
-      centerDialogVisible: false,
+      driverDialogVisible: false,
       tableUploadLoading: false,
       tableDialogList: [],
       caleHeight: 490,
@@ -118,7 +85,7 @@ export default {
   methods: {
     // 导入弹出层 取消
     DialogQuXiao() {
-      this.centerDialogVisible = false;
+      this.driverDialogVisible = false;
       this.tableDialogList = [];
       this.dialogMessage = "";
     },
@@ -132,12 +99,12 @@ export default {
           let formData = new FormData();
           formData.append("userId", this.$store.getters.userInfo.userId);
           formData.append("userName", this.$store.getters.userInfo.userName);
-          formData.append("vehicles", this.importSuccessData);
+          formData.append("drivers", this.exceljson);
           let config = {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
           };
           axios({
-            url: "api/blade-platform/platform/vehicle/vehicleImportOk",
+            url: "/api/blade-platform/platform/yayunyuan/driverImportOk",
             method: "post",
             data: formData,
             config,
@@ -145,8 +112,8 @@ export default {
             .then((res) => {
               if (res.status === 200) {
                 this.$message.success("导入成功");
+                this.driverDialogVisible = false;
                 this.uploadtureloading = false;
-                this.centerDialogVisible = false;
                 this.datenow=new Date().getTime();
                 this.tableDialogList = [];
                 this.dialogMessage = "";
