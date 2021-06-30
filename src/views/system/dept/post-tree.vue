@@ -11,7 +11,7 @@
       ref="tree"
       :default-checked-keys="keys"
       :data="data"
-      :props="{ label: 'deptName' }"
+      :props="defaultProps"
       highlight-current
       accordion
       show-checkbox
@@ -39,6 +39,11 @@ export default {
       keys: [],
       dialog: false,
       loading: false,
+      defaultProps: {
+        children: "children",
+        label: "deptName",
+        disabled: this.disabledFN,
+      },
     };
   },
   methods: {
@@ -51,6 +56,27 @@ export default {
           this.getData();
         }
       });
+    },
+    // 树结构 父节点禁用方法
+    disabledFN(treedata) {
+      let str = treedata.treeCode.indexOf("000001005446");
+      if (
+        this.row.jigouleixing == "qiye" ||
+        this.row.jigouleixing == "geti" ||
+        this.row.jigouleixing == "qita"
+      ) {
+        if (str !== -1) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (str === -1) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     },
     quxiao() {
       this.dialog = false;

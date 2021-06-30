@@ -156,16 +156,32 @@ export default {
     },
     "formData.deptName": {
       handler(val) {
-        if (this.isNumber(val) === false) return;
         if (val != "" && val != undefined && val != null) {
-          getByIdJiaShiYuanList(val).then((res) => {
-            this.FIELD.jiashiyuanxingming.dicData = res.data.data.map((el) => {
-              el.label = el.jiashiyuanxingming;
-              el.value = el.jiashiyuanxingming;
-              return el;
+          if (this.isNumber(val) === false) {
+            getByIdDeptList(this.$store.getters.deptId).then(res => {
+              res.data.data.map(el => {
+                if (el.deptName === val) {
+                  getByIdJiaShiYuanList(el.id).then((res) => {
+                    this.FIELD.jiashiyuanxingming.dicData = res.data.data.map((el) => {
+                      el.label = el.jiashiyuanxingming;
+                      el.value = el.jiashiyuanxingming;
+                      return el;
+                    });
+                    this.FIELD.jiashiyuanxingming.filterable = true;
+                  });
+                }
+              });
+            })
+          } else {
+            getByIdJiaShiYuanList(val).then((res) => {
+              this.FIELD.jiashiyuanxingming.dicData = res.data.data.map((el) => {
+                el.label = el.jiashiyuanxingming;
+                el.value = el.jiashiyuanxingming;
+                return el;
+              });
+              this.FIELD.jiashiyuanxingming.filterable = true;
             });
-            this.FIELD.jiashiyuanxingming.filterable = true;
-          });
+          }
         }
       },
       immediate: false,

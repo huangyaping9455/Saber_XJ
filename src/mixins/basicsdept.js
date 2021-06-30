@@ -370,12 +370,12 @@ export default {
         row.createtime = this.getNowFormatDate();
       }
       row.isdelete = 0;
-      if (this.nodeData.extendType == "岗位" || this.nodeData.extendType == "部门") {
+      if ((this.nodeData && this.nodeData.extendType == "岗位") || (this.nodeData && this.nodeData.extendType == "部门")) {
         row.deptId = this.nodeData.id;
         row.id = this.nodeData.id;
       }
       if (row.jigouleixing === "qiye" || row.jigouleixing === "geti" || row.jigouleixing === "qita") {
-        if (row.province !== row.$province || row.province == "") {
+        if ((this.node && this.node.extendType === "岗位") || (this.node && this.node.extendType === "部门")) {
           update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
             this.$message({
               type: "success",
@@ -385,57 +385,68 @@ export default {
             callback && callback(res);
           });
         } else {
-          getSheng(this.$store.getters.deptId, 0, 1).then(res => {
-            res.data.data.map(el => {
-              if (el.deptName === row.province) {
-                row.province = el.id;
-                if (row.city !== "") {
-                  getSheng(el.id, 1, 1).then(ren => {
-                    ren.data.data.map(val => {
-                      if (val.deptName === row.city) {
-                        row.city = val.id;
-                        if (row.country !== "") {
-                          getSheng(val.id, 2, 1).then(rec => {
-                            rec.data.data.map(vac => {
-                              if (vac.deptName === row.country) {
-                                row.country = vac.id;
-                                update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
-                                  this.$message({
-                                    type: "success",
-                                    message: res.data.msg,
-                                  });
-                                  list && this.getList();
-                                  callback && callback(res);
-                                });
-                              }
-                            });
-                          })
-                        } else {
-                          update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
-                            this.$message({
-                              type: "success",
-                              message: res.data.msg,
-                            });
-                            list && this.getList();
-                            callback && callback(res);
-                          });
-                        }
-                      }
-                    });
-                  })
-                } else {
-                  update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
-                    this.$message({
-                      type: "success",
-                      message: res.data.msg,
-                    });
-                    list && this.getList();
-                    callback && callback(res);
-                  });
-                }
-              }
+          if (row.province !== row.$province || row.province == "") {
+            update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
+              this.$message({
+                type: "success",
+                message: res.data.msg,
+              });
+              list && this.getList();
+              callback && callback(res);
             });
-          })
+          } else {
+            getSheng(this.$store.getters.deptId, 0, 1).then(res => {
+              res.data.data.map(el => {
+                if (el.deptName === row.province) {
+                  row.province = el.id;
+                  if (row.city !== "") {
+                    getSheng(el.id, 1, 1).then(ren => {
+                      ren.data.data.map(val => {
+                        if (val.deptName === row.city) {
+                          row.city = val.id;
+                          if (row.country !== "") {
+                            getSheng(val.id, 2, 1).then(rec => {
+                              rec.data.data.map(vac => {
+                                if (vac.deptName === row.country) {
+                                  row.country = vac.id;
+                                  update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
+                                    this.$message({
+                                      type: "success",
+                                      message: res.data.msg,
+                                    });
+                                    list && this.getList();
+                                    callback && callback(res);
+                                  });
+                                }
+                              });
+                            })
+                          } else {
+                            update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
+                              this.$message({
+                                type: "success",
+                                message: res.data.msg,
+                              });
+                              list && this.getList();
+                              callback && callback(res);
+                            });
+                          }
+                        }
+                      });
+                    })
+                  } else {
+                    update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
+                      this.$message({
+                        type: "success",
+                        message: res.data.msg,
+                      });
+                      list && this.getList();
+                      callback && callback(res);
+                    });
+                  }
+                }
+              });
+            })
+          }
         }
       } else {
         update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {

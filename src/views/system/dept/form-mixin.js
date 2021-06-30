@@ -38,6 +38,13 @@ export default {
     'state.isAdd'() {
       this.toggle();
     },
+    'state'() {
+      if (this.state.isAdd == true && this.state.isDept == true) {
+        this.formData.leixing = "部门"
+      } else if (this.state.isAdd == true && this.state.isPost == true) {
+        this.formData.leixing = "岗位"
+      }
+    },
     formData: {
       deep: true,
       handler() {

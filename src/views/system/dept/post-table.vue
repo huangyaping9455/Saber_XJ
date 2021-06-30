@@ -1,8 +1,13 @@
 <template>
-  <div v-if="ISLOAD" v-show="state.isPost || state.isDept" class="post-table">
+  <!-- <div v-if="ISLOAD" v-show="state.isPost || state.isDept" class="post-table"> -->
+  <div
+    v-if="ISLOAD"
+    v-show="(state.isPost && state.isEdit) || (state.isDept && state.isEdit)"
+    class="post-table"
+  >
     <!-- 表格-岗位人员 -->
     <avue-crud
-    ref="form"
+      ref="form"
       v-model="formData"
       :table-loading="tableLoading"
       :data="tableData"
