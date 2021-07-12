@@ -122,7 +122,16 @@ export default {
     },
     // 树结构 父节点禁用方法
     disabledFN(treedata) {
-      if (treedata.children.length !== 0 || treedata.jigouleixing !== "qiye") {
+      // if (treedata.children.length !== 0 || treedata.jigouleixing !== "qiye") {
+      //   return true;
+      // } else {
+      //   return false;
+      // }
+      if (
+        treedata.jigouleixing !== "qiye" &&
+        treedata.jigouleixing !== "shi" &&
+        treedata.children.length !== 0
+      ) {
         return true;
       } else {
         return false;
