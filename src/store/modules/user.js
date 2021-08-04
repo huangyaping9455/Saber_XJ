@@ -23,6 +23,9 @@ import {
   refeshToken,
   getButtons
 } from '@/api/user';
+import {
+  config
+} from '@/const/config.js';
 
 function addPath(ele, first) {
   const menu = webiste.menu;
@@ -69,12 +72,21 @@ const user = {
       commit,
       dispatch
     }, userInfo) {
+      let usName = ""
+      let psd = ""
+      if (window.location.search == "") {
+        usName = config.aesEncrypt(userInfo.username);
+        psd = config.aesEncrypt(userInfo.password);
+      } else {
+        usName = userInfo.username;
+        psd = userInfo.password;
+      }
       return new Promise((resolve, reject) => {
         loginByUsername(
-          userInfo.username,
-          userInfo.password,
-          userInfo.vercode,
-          userInfo.type
+          usName,
+          psd,
+          config.aesEncrypt(userInfo.vercode),
+          config.aesEncrypt(userInfo.type)
         ).then((res) => {
           const data = res.data.data;
           commit('SET_TOKEN', data.accessToken);

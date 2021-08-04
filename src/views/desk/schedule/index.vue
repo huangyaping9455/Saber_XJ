@@ -80,6 +80,7 @@
         v-model="todoItem"
         @to-detail="toTodoDetail"
         @update="update"
+        :selectDay="selectDay"
       ></todo-detail>
     </div>
   </div>
@@ -116,7 +117,7 @@ export default {
     },
     update() {
       this.$refs.calendar.getDatesData();
-      this.$refs.todo.getAnpaiRicheng();
+      // this.$refs.todo.getAnpaiRicheng();
       this.$refs.todo.getRichengList();
     },
   },

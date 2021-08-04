@@ -1,112 +1,172 @@
 <style lang="scss" scoped>
-.date.new {
-  height: 360px;
-  // background-color: #01a0ff;
-  background-image: linear-gradient(to top right, #44b6ff, #2b73e0);
-  border-radius: 20px;
-  padding: 40px;
-  box-sizing: border-box;
-  display: flex;
-}
-.date-l {
-  flex: 0 0 18%;
-  .yearSelect {
-    border-radius: 15px;
-    overflow: hidden;
-  }
-  .nowDate {
-    font-size: 60px;
-    margin-top: 50px;
-    font-weight: bold;
-    color: #ffffff;
-    text-align: center;
-  }
-  .monthchange {
-    color: #ffffff;
-    font-size: 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ffffff;
-    .icon {
-      cursor: pointer;
-    }
-  }
-  .calendarDate {
-    font-size: 18px;
-    color: #ffffff;
-    display: flex;
-    justify-content: space-between;
-  }
-}
-.date-r {
-  flex: 1;
-  margin-left: 46px;
-  .date-head {
-    display: flex;
-    font-size: 27px;
-    color: #ffffff;
-    text-align: center;
-    span {
-      flex: 1;
-    }
-  }
-  .date-body {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 27px;
-    color: #ffffff;
-    text-align: center;
-    .day {
-      cursor: pointer;
-      flex: 0 0 14.28%;
-      margin: 6px 0;
-      .curDayBg {
-        color: #01a0ff;
-        background: #ffffff;
-        border: none;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
+$root-color: #409eff;
+$root-red: #f56c6c;
+.calendar {
+  .calendar-nav {
+    margin-bottom: 15px;
+    .flex-row {
+      display: flex;
+      margin: 1vmin;
+      .nav-item {
+        width: 25%;
+        text-align: center;
+        .pointer {
+          cursor: pointer;
+          font-size: 2.1vh;
+          color: #999;
+        }
+        .active-nav {
+          position: relative;
+          color: $root-color;
+          font-size: 2.3vh !important;
+          &::after {
+            position: absolute;
+            left: -50%;
+            bottom: -8px;
+            display: inline-block;
+            content: " ";
+            width: 200%;
+            height: 2px;
+            border-radius: 40px;
+            background: $root-color;
+          }
+        }
       }
     }
-    .oddRowBg {
-      background: none;
-    }
   }
-}
-@media screen and (min-width: 1276px) and (max-width: 1528px) {
   .date.new {
-    height: 220px;
-    border-radius: 15px;
-    padding: 20px;
+    height: 360px;
+    // background-color: #01a0ff;
+    background-image: linear-gradient(to top right, #44b6ff, #2b73e0);
+    border-radius: 20px;
+    padding: 40px;
+    box-sizing: border-box;
+    display: flex;
+    .calendar-month {
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      .month-item {
+        width: 11vmin;
+        height: 4vmin;
+        text-align: center;
+        border-radius: 20px;
+        padding: 6px;
+        color: #fff;
+        margin: 2vmin;
+        cursor: pointer;
+        font-size: 2.2vh;
+        &:nth-child(4n) {
+          margin-right: 0;
+        }
+      }
+    }
+    .active-item {
+      color: $root-color !important;
+      background: #fff;
+    }
   }
   .date-l {
     flex: 0 0 18%;
+    .yearSelect {
+      border-radius: 15px;
+      overflow: hidden;
+    }
     .nowDate {
-      font-size: 40px;
-      margin-top: 20px;
+      font-size: 60px;
+      margin-top: 50px;
+      font-weight: bold;
+      color: #ffffff;
+      text-align: center;
     }
     .monthchange {
-      font-size: 16px;
+      color: #ffffff;
+      font-size: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ffffff;
+      .icon {
+        cursor: pointer;
+      }
     }
     .calendarDate {
-      font-size: 12px;
+      font-size: 18px;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
     }
   }
   .date-r {
     flex: 1;
     margin-left: 46px;
     .date-head {
-      font-size: 14px;
+      display: flex;
+      font-size: 27px;
+      color: #ffffff;
+      text-align: center;
+      span {
+        flex: 1;
+      }
     }
     .date-body {
-      font-size: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 27px;
+      color: #ffffff;
+      text-align: center;
       .day {
+        cursor: pointer;
+        flex: 0 0 14.28%;
+        margin: 6px 0;
         .curDayBg {
-          width: 20px;
-          height: 20px;
-          line-height: 20px;
+          color: #01a0ff;
+          background: #ffffff;
+          border: none;
+          width: 40px;
+          height: 40px;
+          line-height: 40px;
+        }
+      }
+      .oddRowBg {
+        background: none;
+      }
+    }
+  }
+  @media screen and (min-width: 1276px) and (max-width: 1528px) {
+    .date.new {
+      height: 220px;
+      border-radius: 15px;
+      padding: 20px;
+    }
+    .date-l {
+      flex: 0 0 18%;
+      .nowDate {
+        font-size: 40px;
+        margin-top: 20px;
+      }
+      .monthchange {
+        font-size: 16px;
+      }
+      .calendarDate {
+        font-size: 12px;
+      }
+    }
+    .date-r {
+      flex: 1;
+      margin-left: 46px;
+      .date-head {
+        font-size: 14px;
+      }
+      .date-body {
+        font-size: 14px;
+        .day {
+          .curDayBg {
+            width: 20px;
+            height: 20px;
+            line-height: 20px;
+          }
         }
       }
     }
@@ -115,58 +175,94 @@
 </style>
 
 <template>
-  <div class="date new">
-    <div class="date-l">
-      <el-select
-        class="yearSelect"
-        size="small"
-        v-model="year"
-        @on-change="getYear"
-      >
-        <el-option v-for="value in yearList" :value="value" :key="value">{{
-          value
-        }}</el-option>
-      </el-select>
-      <p class="nowDate">{{ this.day }}</p>
-      <div class="monthchange">
-        <i
-          type="ios-arrow-back"
-          color="#ffffff"
-          size="mini"
-          class="el-icon-arrow-left btn-back"
-          @click="getPreMonth"
-        />
-        <span>{{ month }}月</span>
-        <i
-          type="ios-arrow-forward"
-          color="#ffffff"
-          size="mini"
-          class="el-icon-arrow-right btn-forward"
-          @click="getNexMonth"
-        />
-      </div>
-      <p class="calendarDate">
-        <span>星期{{ week }}</span>
-        <span>{{ theCalendar.IMonthCn }}{{ theCalendar.IDayCn }}</span>
-      </p>
-    </div>
-    <div class="date-r">
-      <div class="date-head">
-        <span v-for="item in weekNumber" :key="item">{{ item }}</span>
-      </div>
-      <div class="date-body">
-        <div
-          v-for="(item, index) in calendarCell"
-          :key="index"
-          :class="item.class"
-        >
+  <div class="calendar">
+    <div class="calendar-nav">
+      <dl class="flex-row">
+        <dd class="nav-item" v-for="(item, index) in nav" :key="item.id">
           <span
-            v-if="item.num"
-            :class="getNumClass(item)"
-            @click="changeDay(item)"
-            >{{ item.num }}</span
+            class="pointer"
+            :class="[
+              {
+                'active-nav': index === navIndex,
+              },
+            ]"
+            @click="navHandle(item, index)"
+            >{{ item.name }}</span
           >
+        </dd>
+      </dl>
+    </div>
+    <div class="date new">
+      <div class="date-l">
+        <el-select
+          class="yearSelect"
+          size="small"
+          v-model="year"
+          @on-change="getYear"
+        >
+          <el-option v-for="value in yearList" :value="value" :key="value">{{
+            value
+          }}</el-option>
+        </el-select>
+        <p class="nowDate">{{ this.day }}</p>
+        <div class="monthchange">
+          <i
+            type="ios-arrow-back"
+            color="#ffffff"
+            size="mini"
+            class="el-icon-arrow-left btn-back"
+            @click="getPreMonth"
+          />
+          <span>{{ month }}月</span>
+          <i
+            type="ios-arrow-forward"
+            color="#ffffff"
+            size="mini"
+            class="el-icon-arrow-right btn-forward"
+            @click="getNexMonth"
+          />
         </div>
+        <p class="calendarDate">
+          <span>星期{{ week }}</span>
+          <span>{{ theCalendar.IMonthCn }}{{ theCalendar.IDayCn }}</span>
+        </p>
+      </div>
+      <div class="date-r" v-show="calendarType === 'day'">
+        <div class="date-head">
+          <span v-for="item in weekNumber" :key="item">{{ item }}</span>
+        </div>
+        <div class="date-body">
+          <div
+            v-for="(item, index) in calendarCell"
+            :key="index"
+            :class="item.class"
+          >
+            <span
+              v-if="item.num"
+              :class="getNumClass(item)"
+              @click="changeDay(item)"
+              >{{ item.num }}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        v-show="calendarType === 'month'"
+        class="date-r calendar-month flex-wrap flex xy-between"
+      >
+        <span
+          class="month-item pointer"
+          v-for="item in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+          :key="item"
+          :class="[
+            {
+              'active-item': item === month,
+            },
+          ]"
+          @click="otherClick(item, 'month')"
+          >{{ item }}</span
+        >
       </div>
     </div>
   </div>
@@ -191,6 +287,15 @@ export default {
       yearList: [],
       showYearList: false,
       calendarCell: [],
+      nav: [
+        { id: 1, name: "日", type: "day" },
+        { id: 2, name: "周", type: "week" },
+        { id: 3, name: "月", type: "month" },
+        { id: 4, name: "季", type: "quarter" },
+        { id: 5, name: "年", type: "year" },
+      ],
+      navIndex: 0,
+      calendarType: "day",
     };
   },
   computed: {
@@ -240,6 +345,7 @@ export default {
     // 初始化当前日期
     initSelectDay() {
       let item = this.calendarCell.find((item) => item.num == this.day);
+      item.leixing = 1;
       this.changeDay(item);
     },
     // 日期变化
@@ -247,7 +353,6 @@ export default {
       this.month = Number(item.date.split("-")[1]);
       this.selectDay = item;
       this.day = item.num;
-      // console.log(item);
     },
     // 获取当前星期几
     getWeek() {
@@ -345,7 +450,8 @@ export default {
         );
         let num = Number(date.split("-").pop());
         let week = this.weekNumber[weekIndex];
-        dateArr[i] = { num, week, date, class: ["day"] };
+        let leixing = 1;
+        dateArr[i] = { num, week, date, class: ["day"], leixing };
         if (i < startIndex || j > totalDays) {
           dateArr[i].class.push("day-ignore");
         }
@@ -356,6 +462,38 @@ export default {
       }
       this.startIndex = startIndex;
       this.calendarCell = dateArr;
+    },
+    // 日 周 年 月
+    navHandle(item, index) {
+      this.calendarType = item.type;
+      this.navIndex = index;
+      this.selectDay.leixing = index + 1;
+      if (item.type === "day") {
+        this.day = dayjs().date();
+        this.selectDay.date = dayjs(
+          new Date(this.year, this.month - 1, this.day)
+        ).format("YYYY-MM-DD");
+        // this.getNumClass(this.selectDay);
+      } else if (item.type === "month") {
+        this.day = 1;
+        this.selectDay.date = dayjs(
+          new Date(this.year, this.month - 1, 1)
+        ).format("YYYY-MM-DD");
+      }
+    },
+    //月 点击
+    otherClick(item, type) {
+      if (type !== "month") {
+        this.quarterIndex = index;
+      } else {
+        this.month = item;
+        this.day = 1;
+        let sss = dayjs(new Date(this.year, this.month - 1, 1)).format(
+          "YYYY-MM-DD"
+        );
+        this.selectDay.date = sss;
+        this.selectDay.leixing = 3;
+      }
     },
   },
 };

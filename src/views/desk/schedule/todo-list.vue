@@ -245,7 +245,7 @@ export default {
       deptId: this.$store.getters.deptId,
       loading: false,
       checkedindex: 0,
-      myList: [],
+      // myList: [],
       todayList: [],
       overdueList: [],
       dialogVisible: false,
@@ -290,12 +290,12 @@ export default {
     },
   },
   watch: {
-    selectDay: {
+    "selectDay.date": {
       immediate: true,
       handler() {
         if (this.selectDay.date) {
           this.getRichengList();
-          this.getAnpaiRicheng();
+          // this.getAnpaiRicheng();
           this.getChaoqiRicheng();
         }
       },
@@ -380,19 +380,19 @@ export default {
         this.loading = false;
       });
     },
-    getAnpaiRicheng() {
-      getAnpaiRicheng(
-        this.deptId,
-        this.selectDay.date,
-        0,
-        0,
-        this.renwubiaoti,
-        this.isFinish,
-        this.renwuleixing
-      ).then((res) => {
-        this.myList = res.data.data.records;
-      });
-    },
+    // getAnpaiRicheng() {
+    //   getAnpaiRicheng(
+    //     this.deptId,
+    //     this.selectDay.date,
+    //     0,
+    //     0,
+    //     this.renwubiaoti,
+    //     this.isFinish,
+    //     this.renwuleixing
+    //   ).then((res) => {
+    //     this.myList = res.data.data.records;
+    //   });
+    // },
     getChaoqiRicheng() {
       getChaoqiRicheng(
         this.deptId,
@@ -423,9 +423,11 @@ export default {
           this.$message.success(res.data.msg);
           if (this.checkedindex == 0) {
             this.getRichengList();
-          } else if (this.checkedindex == 1) {
-            this.getAnpaiRicheng();
-          } else {
+          }
+          // else if (this.checkedindex == 1) {
+          //   this.getAnpaiRicheng();
+          // }
+          else {
             this.getChaoqiRicheng();
           }
         } else {
@@ -443,10 +445,12 @@ export default {
       if (this.checkedindex == 0) {
         this.getRichengList();
         this.filterVisible = false;
-      } else if (this.checkedindex == 1) {
-        this.getAnpaiRicheng();
-        this.filterVisible = false;
-      } else {
+      }
+      // else if (this.checkedindex == 1) {
+      //   this.getAnpaiRicheng();
+      //   this.filterVisible = false;
+      // }
+      else {
         this.getChaoqiRicheng();
         this.filterVisible = false;
       }

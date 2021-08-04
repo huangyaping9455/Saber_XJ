@@ -72,22 +72,25 @@
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
             <router-link to="/info/index">
-              {{
-              $t("navbar.userinfo")
-              }}
+              {{ $t("navbar.userinfo") }}
             </router-link>
           </el-dropdown-item>
-          <el-dropdown-item @click.native="checkPost">{{ $t("navbar.switchPost") }}</el-dropdown-item>
+          <el-dropdown-item @click.native="checkPost">{{
+            $t("navbar.switchPost")
+          }}</el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            {{
-            $t("navbar.logOut")
-            }}
+            {{ $t("navbar.logOut") }}
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
     <el-dialog :title="$t('navbar.switchPost')" :visible.sync="isSwitch">
-      <el-table v-loading="loading" :data="postData" size="mini" style="width: 100%">
+      <el-table
+        v-loading="loading"
+        :data="postData"
+        size="mini"
+        style="width: 100%"
+      >
         <el-table-column prop="postName" label="岗位名称"></el-table-column>
         <el-table-column label="操作" width="180">
           <template slot-scope="{ row }">
@@ -97,8 +100,15 @@
               icon="el-icon-success"
               size="mini"
               @click="switchPost(row)"
-            >当前</el-button>
-            <el-button v-else icon="el-icon-setting" size="mini" @click="switchPost(row)">切换</el-button>
+              >当前</el-button
+            >
+            <el-button
+              v-else
+              icon="el-icon-setting"
+              size="mini"
+              @click="switchPost(row)"
+              >切换</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -106,18 +116,18 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex';
-import { fullscreenToggel, listenfullscreen } from '@/util/util';
-import topLock from './top-lock';
-import topMenu from './top-menu';
-import topSearch from './top-search';
-import topTheme from './top-theme';
-import topLogs from './top-logs';
-import topColor from './top-color';
-import topLang from './top-lang';
-import { checkPost } from '@/api/system/dept';
+import { mapGetters, mapState } from "vuex";
+import { fullscreenToggel, listenfullscreen } from "@/util/util";
+import topLock from "./top-lock";
+import topMenu from "./top-menu";
+import topSearch from "./top-search";
+import topTheme from "./top-theme";
+import topLogs from "./top-logs";
+import topColor from "./top-color";
+import topLang from "./top-lang";
+import { checkPost } from "@/api/system/dept";
 export default {
-  name: 'top',
+  name: "top",
   components: {
     topLock,
     topMenu,
@@ -125,37 +135,37 @@ export default {
     topTheme,
     topLogs,
     topColor,
-    topLang
+    topLang,
   },
   filters: {},
   data() {
     return {
       loading: false,
       isSwitch: false,
-      postData: []
+      postData: [],
     };
   },
   computed: {
     ...mapState({
-      showDebug: state => state.common.showDebug,
-      showTheme: state => state.common.showTheme,
-      showLock: state => state.common.showLock,
-      showFullScren: state => state.common.showFullScren,
-      showCollapse: state => state.common.showCollapse,
-      showSearch: state => state.common.showSearch,
-      showMenu: state => state.common.showMenu,
-      showColor: state => state.common.showColor
+      showDebug: (state) => state.common.showDebug,
+      showTheme: (state) => state.common.showTheme,
+      showLock: (state) => state.common.showLock,
+      showFullScren: (state) => state.common.showFullScren,
+      showCollapse: (state) => state.common.showCollapse,
+      showSearch: (state) => state.common.showSearch,
+      showMenu: (state) => state.common.showMenu,
+      showColor: (state) => state.common.showColor,
     }),
     ...mapGetters([
-      'userInfo',
-      'isFullScren',
-      'tagWel',
-      'tagList',
-      'isCollapse',
-      'tag',
-      'logsLen',
-      'logsFlag'
-    ])
+      "userInfo",
+      "isFullScren",
+      "tagWel",
+      "tagList",
+      "isCollapse",
+      "tag",
+      "logsLen",
+      "logsFlag",
+    ]),
   },
   created() {},
   mounted() {
@@ -166,19 +176,23 @@ export default {
       fullscreenToggel();
     },
     setCollapse() {
-      this.$store.commit('SET_COLLAPSE');
+      this.$store.commit("SET_COLLAPSE");
     },
     setScreen() {
-      this.$store.commit('SET_FULLSCREN');
+      this.$store.commit("SET_FULLSCREN");
     },
     logout() {
-      this.$confirm(this.$t('logoutTip'), this.$t('tip'), {
-        confirmButtonText: this.$t('submitText'),
-        cancelButtonText: this.$t('cancelText'),
-        type: 'warning'
+      this.$confirm(this.$t("logoutTip"), this.$t("tip"), {
+        confirmButtonText: this.$t("submitText"),
+        cancelButtonText: this.$t("cancelText"),
+        type: "warning",
       }).then(() => {
-        this.$store.dispatch('FedLogOut');
-        this.$router.push({ path: '/login' });
+        this.$store.dispatch("FedLogOut");
+        if (window.location.search === "") {
+          this.$router.push({ path: "/login" });
+        } else {
+          window.location.href = "http://39.105.108.33/dist/index.html";
+        }
       });
     },
     checkPost() {
@@ -191,10 +205,10 @@ export default {
     },
     switchPost(row) {
       this.isSwitch = true;
-      this.$store.dispatch('GetUserInfo', row.postId).then(() => {
+      this.$store.dispatch("GetUserInfo", row.postId).then(() => {
         this.$message({
           message: `${row.postName}，切换成功`,
-          type: 'success'
+          type: "success",
         });
         this.isSwitch = false;
         this.loading = false;
@@ -202,8 +216,8 @@ export default {
           location.reload();
         }, 500);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -211,7 +225,7 @@ export default {
 .menu {
   cursor: pointer;
 }
-.el-popper[x-placement^='bottom'] {
+.el-popper[x-placement^="bottom"] {
   margin-top: 0px;
 }
 </style>

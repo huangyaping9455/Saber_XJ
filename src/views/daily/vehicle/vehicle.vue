@@ -472,7 +472,7 @@ export default {
     // 表格模板下载
     DowInfo() {
       window.open(
-        "http://222.82.236.242:8894/" +
+        this.$store.getters.userInfo.urlPrefix +
           "SafetyStandards/模板/导入车辆资料模板（跨公司）.xls"
       );
     },

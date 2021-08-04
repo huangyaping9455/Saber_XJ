@@ -335,6 +335,7 @@ export default {
           return;
         },
       },
+      readonly: false,
     };
   },
   computed: {
@@ -370,6 +371,20 @@ export default {
         return time.getTime() > dayjs(val);
       };
     },
+
+    "selectDay.leixing": {
+      handler(val) {
+        if (val === 3) {
+          this.readonly = true;
+          this.form.renwukaishishijian = this.getCurrentMonthFirst();
+          this.form.renwujiezhishijian = this.getCurrentMonthLast();
+          this.$refs.form.clearValidate(this.form.renwukaishishijian);
+        } else {
+          this.readonly = false;
+          this.toInit();
+        }
+      },
+    },
   },
   mounted() {
     this.toInit();
@@ -378,6 +393,38 @@ export default {
     this.getYDtreeList();
   },
   methods: {
+    // 获取当前选择月的第一天
+    getCurrentMonthFirst() {
+      var date = new Date(this.selectDay.date);
+      date.setDate(1);
+      var month = parseInt(date.getMonth() + 1);
+      var day = date.getDate();
+      if (month < 10) {
+        month = "0" + month;
+      }
+      if (day < 10) {
+        day = "0" + day;
+      }
+      return date.getFullYear() + "-" + month + "-" + day;
+    },
+    // 获取当前月的最后一天
+    getCurrentMonthLast() {
+      var date = new Date(this.selectDay.date);
+      var currentMonth = date.getMonth();
+      var nextMonth = ++currentMonth;
+      var nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1);
+      var oneDay = 1000 * 60 * 60 * 24;
+      var lastTime = new Date(nextMonthFirstDay - oneDay);
+      var month = parseInt(lastTime.getMonth() + 1);
+      var day = lastTime.getDate();
+      if (month < 10) {
+        month = "0" + month;
+      }
+      if (day < 10) {
+        day = "0" + day;
+      }
+      return date.getFullYear() + "-" + month + "-" + day;
+    },
     // 获取所属单位
     // getByIdDeptList() {
     //   getByIdDeptList(this.$store.getters.deptId).then((res) => {
@@ -571,7 +618,7 @@ export default {
     // },
     // 所属单位
     danwei(val) {
-      console.log(val);
+      // console.log(val);
       this.danweiid = val;
     },
     // 执行人变化
@@ -629,13 +676,7 @@ export default {
           let data = this.form;
           data.isZhongyao = data.$isZhongyao ? 1 : 0;
           data.isJinji = data.$isJinji ? 1 : 0;
-          // data.renwukaishishijian = dayjs(data.$taskTime[0]).format(
-          //   "YYYY-MM-DD"
-          // );
-          // data.renwujiezhishijian = dayjs(data.$taskTime[1]).format(
-          //   "YYYY-MM-DD"
-          // );
-
+          data.leixing = this.selectDay.leixing;
           this.state.submit(data).then((res) => {
             let type = res.data.success ? "success" : "error";
             this.$message[type](res.data.msg);

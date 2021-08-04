@@ -2,7 +2,7 @@
   <el-dialog
     :visible.sync="dialog"
     @open="openDialog"
-    title="设置人员岗位"
+    title="设置预警权限"
     width="40%"
   >
     <el-tree
@@ -10,13 +10,14 @@
       v-loading="loading"
       ref="tree"
       :default-checked-keys="keys"
+      :check-strictly="true"
       :data="data"
-      :props="defaultProps"
       highlight-current
       accordion
       show-checkbox
       empty-text="暂无数据"
       node-key="id"
+      :props="defaultProps"
     ></el-tree>
     <span slot="footer" class="dialog-footer">
       <el-button @click="quxiao">取 消</el-button>
@@ -26,7 +27,8 @@
 </template>
 
 <script>
-import { treeDG, checkHavePost, saveMultiple } from "@/api/system/dept";
+import { treeDG, checkHavePost, saveMultiple } from "@/api/system/dept"; //getyujingquanxian
+import { getyujingquanxian } from "@/api/dept/noticelist";
 export default {
   name: "sub-tree",
   props: {
@@ -47,65 +49,59 @@ export default {
     };
   },
   methods: {
+    // 显示弹框
     show(row) {
       this.row = row;
       this.dialog = true;
-      this.$nextTick(() => {
-        this.getKeys(row.id);
-        if (this.data.length == 0) {
-          this.getData();
-        }
-      });
+      // this.$nextTick(() => {
+      //   this.getKeys(row.id);
+      //   if (this.data.length == 0) {
+      //     this.getData();
+      //   }
+      // });
     },
+
     // 树结构 父节点禁用方法
     disabledFN(treedata) {
       let str = treedata.treeCode.indexOf("000001005446");
-      if (
-        this.row.jigouleixing == "qiye" ||
-        this.row.jigouleixing == "geti" ||
-        this.row.jigouleixing == "qita" ||
-        this.row.jigouleixing == "fenzu" ||
-        this.row.jigouleixing == "sheng" ||
-        this.row.jigouleixing == "shi"
-      ) {
-        if (str !== -1) {
-          return true;
-        } else {
-          return false;
-        }
+      if (str !== -1) {
+        return true;
       } else {
-        if (str === -1) {
-          return true;
-        } else {
-          return false;
-        }
+        return false;
       }
     },
+    // 关闭弹框
     quxiao() {
-      this.getData();
       this.dialog = false;
+      this.getData();
     },
+    // 提交
     setting() {
       let keys = [];
+      let menus = [];
       this.$refs.tree.getCheckedNodes().forEach((node) => {
-        if (node.extendType == "岗位") {
-          keys.push(node.id);
-        }
+        keys.push(node.id);
+      });
+      this.row.forEach((val) => {
+        menus.push(val.yujingxiangid);
       });
       let checkedKeys = keys.join(",");
-      saveMultiple(this.row.userid, checkedKeys).then(() => {
-        this.$parent.refreshChange();
+      let menuids = menus.join(",");
+      getyujingquanxian(menuids, checkedKeys).then(() => {
+        this.dialog = false;
+        this.$parent.refreshList();
         this.getData();
         this.$message({
           type: "success",
           message: "操作成功!",
         });
-        this.dialog = false;
       });
     },
+    // 打开弹框得方法
     openDialog() {
       this.getData();
     },
+    // 获取组织树
     getData() {
       this.loading = true;
       treeDG(this.$store.getters.postId).then(({ data }) => {
@@ -113,6 +109,7 @@ export default {
         this.loading = false;
       });
     },
+
     getKeys() {
       this.$refs.tree.getCheckedKeys().forEach((key) => {
         this.$refs.tree.setChecked(key, false);

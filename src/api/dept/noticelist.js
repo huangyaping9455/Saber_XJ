@@ -204,3 +204,40 @@ export const getGDSMXVehicleList = (deptId, begintime, endtime, current, size, a
     },
   });
 };
+// 预警权限
+export const getyujingquanxian = (menuIds, postIds) => {
+  return request({
+    url: '/api/blade-platform/platform/yujingquanxian/submit',
+    method: 'get',
+    params: {
+      menuIds,
+      postIds
+    },
+  });
+};
+// 预警项企业
+export const selectYJDept = (deptId, current, size, yujingxiang, deptName) => {
+  return request({
+    url: '/api/blade-platform/platform/yujingquanxian/selectYJDept',
+    method: 'post',
+    data: {
+      deptId,
+      current,
+      size,
+      yujingxiang,
+      deptName
+    },
+  });
+};
+// 预警项企业
+export const delYuJingByXiangId = (deptId, postId, yujingxiangid) => {
+  return request({
+    url: '/api/blade-platform/platform/yujingquanxian/delYuJingByXiangId',
+    method: 'post',
+    params: {
+      deptId,
+      postId,
+      yujingxiangid
+    },
+  });
+};

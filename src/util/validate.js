@@ -242,3 +242,8 @@ export function validatenull(val) {
   }
   return false;
 }
+// 判断密码强度
+export function validatepsd(num) {
+  const pasd = /^\S*(?=\S{6,})(?=\S*\d)(?=\S*[a-zA-Z])\S*$/;
+  return pasd.test(num);
+}

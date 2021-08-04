@@ -263,6 +263,11 @@ export default {
           if (i.jidongchejiashizheng) {
             i.jidongchejiashizheng = eval(i.jidongchejiashizheng);
           }
+          if (i.zhongduanleixing === -1) {
+            i.zhongduanleixing = "";
+          } else {
+            i.zhongduanleixing = i.zhongduanleixing + "";
+          }
           return i;
         })
         let data = res.data.data;

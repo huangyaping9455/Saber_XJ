@@ -77,6 +77,7 @@ export default {
         vercode: "",
         username: "",
         password: "",
+        type: 0,
       },
       loginRules: {
         verCode: [{ required: true, message: "请输入验证码", trigger: "blur" }],
@@ -107,7 +108,7 @@ export default {
     // 获取验证码
     getVerCode() {
       verificationCode().then((res) => {
-        this.verCode = res.data.data;
+        this.verCode = res.data.data.account;
       });
     },
     showPassword() {
@@ -146,6 +147,19 @@ export default {
           this.$store
             .dispatch("LoginByUsername", this.loginForm)
             .then((res) => {
+              // 登录时添加提示，若密码强度太低，提醒修改密码，3.5秒后自动消失
+              if (this.$store.getters.userInfo.passWord === "123456") {
+                this.$notify.warning({
+                  title: "提示",
+                  dangerouslyUseHTMLString: true,
+                  message: `<div><span>您的密码强度太低，请</span>
+                            <a style="margin-left:2px;cursor: pointer;color:#409EFF;" href="/#/info">修改密码</a>
+                            </div>`,
+                  duration: 3500,
+                  offset: 40,
+                });
+              }
+              // 跳转首页
               this.$router.push({ path: this.tagWel.value });
             })
             .catch((rej) => {

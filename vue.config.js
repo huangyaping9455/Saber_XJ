@@ -5,11 +5,13 @@ const resolve = (dir) => path.join(__dirname, dir);
 
 // const baseUrl = "http://www.zkgt-safety.com:8200";
 const baseUrl = "http://222.82.236.242:8896";
+// const baseUrl = "http://58.144.142.198:8896";//铭信
 // const baseUrl = "http://47.108.26.59:8200";
 // const baseUrl = "http://47.108.29.76:8200";
 // const baseUrl = "http://114.115.168.84:8200";
 // const baseUrl = "http://47.112.250.151:8200";
 // const baseUrl = "http://60.171.241.126:8200";
+// const baseUrl = "http://218.70.170.82:8200";
 
 module.exports = {
   lintOnSave: true,

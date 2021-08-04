@@ -1,5 +1,10 @@
 <template>
-  <div class="updatepsd">
+  <el-dialog
+    title="修改密码"
+    :visible.sync="upasdVisible"
+    @close="close"
+    width="30%"
+  >
     <el-form
       :label-position="left"
       label-width="100px"
@@ -24,19 +29,22 @@
       <el-form-item label="确认密码" prop="password">
         <el-input type="password" v-model="form.password" clearable></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button class="sub_btn" type="primary" @click="handleSubmit"
-          >确 定</el-button
-        >
-      </el-form-item>
     </el-form>
-  </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="upasdVisible = false">取 消</el-button>
+      <el-button type="primary" @click="handleSubmit">确 定</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
 import { changepassword } from "@/api/user";
 
 export default {
+  props: {
+    node: Object,
+    tableRow: Object,
+  },
   data() {
     const validatePass = (rule, value, callback) => {
       const pasd = /^\S*(?=\S{6,})(?=\S*\d)(?=\S*[a-zA-Z])\S*$/;
@@ -65,6 +73,7 @@ export default {
         newpassword: "",
         password: "",
       },
+      upasdVisible: false,
       rules: {
         oldpassword: [
           { required: true, message: "请输入原密码", trigger: "blur" },
@@ -83,21 +92,16 @@ export default {
     handleSubmit() {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          let userId = this.$store.state.user.userInfo.userId;
+          let userId = this.tableRow.userid;
           let oldpassword = this.form.oldpassword;
           let password = this.form.password;
           changepassword(userId, oldpassword, password).then((res) => {
             if (res.data.code === 200) {
+              this.upasdVisible = false;
               this.$message({
-                message: res.data.msg + ",请重新登录",
+                message: res.data.msg,
                 type: "success",
               });
-              this.$store.dispatch("FedLogOut");
-              this.form.oldpassword = "";
-              this.form.newpassword = "";
-              this.form.password = "";
-              this.$refs.ruleForm.clearValidate();
-              this.$router.push({ path: "/login" });
             } else {
               this.$message({
                 message: res.data.msg,
@@ -111,19 +115,14 @@ export default {
         }
       });
     },
+    close() {
+      this.form.oldpassword = "";
+      this.form.newpassword = "";
+      this.form.password = "";
+      this.$refs.ruleForm.clearValidate();
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.updatepsd {
-  width: 50%;
-  padding: 5vmin 3vmin;
-  background-color: #fff;
-  margin: 3vmin auto;
-  .sub_btn {
-    margin-top: 3vmin;
-    margin-left: 28vmin;
-  }
-}
-</style>
+<style></style>

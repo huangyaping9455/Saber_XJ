@@ -340,23 +340,32 @@ export default {
     // 节点禁用的方法
     disabledFN(treedata, node) {
       if (this.state.grantTreeState.mark == 3) {
+        let st = this.$parent.$parent.formData.province.indexOf("运管局");
+        let strs = this.$parent.$parent.formData.province.substring(0, st);
+        if (strs.indexOf("省") === -1) {
+          strs = strs + "省";
+        }
         if (
           treedata.jigouleixing == "geti" ||
           treedata.jigouleixing == "fenzu" ||
           treedata.jigouleixing == "qiye" ||
-          treedata.jigouleixing == "xianZF"
+          treedata.jigouleixing == "xianZF" ||
+          treedata.jigouleixing == "shi"
         ) {
-          if (node.label == "安全管理平台" || node.label == "监控中心") {
+          if (this.$parent.$parent.treeNode.label == node.label) {
             return true;
           } else {
-            if (this.$parent.$parent.treeNode.label == node.label) {
-              return true;
-            } else {
-              return false;
-            }
+            return false;
           }
         } else {
-          return true;
+          if (
+            strs === node.label ||
+            this.$parent.$parent.formData.province === node.label
+          ) {
+            return false;
+          } else {
+            return true;
+          }
         }
       } else {
         return false;

@@ -4,7 +4,9 @@ import VueAxios from 'vue-axios';
 import App from './App';
 import router from './router/router';
 import store from './store';
-import { loadStyle } from './util/util';
+import {
+  loadStyle
+} from './util/util';
 import * as urls from '@/config/env';
 import Element from 'element-ui';
 import i18n from './lang'; // Internationalization

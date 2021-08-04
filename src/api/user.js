@@ -6,17 +6,17 @@ import {
 export const loginByUsername = (
     name,
     password,
-    verificationCode,
-    status = 0
+    clientVerifyCode,
+    type
   ) =>
   request({
-    url: '/api/blade-auth/signIn',
+    url: '/api/blade-auth/auth/signIn',
     method: 'post',
     params: {
       name,
       password,
-      verificationCode,
-      status
+      clientVerifyCode,
+      type
     }
   });
 
@@ -56,7 +56,7 @@ export const getMenu = (postId) =>
 
 export const logout = () =>
   request({
-    url: '/api/blade-auth/signOut',
+    url: '/api/blade-auth/auth/signOut',
     method: 'get'
   });
 
@@ -75,7 +75,7 @@ export const sendLogs = (list) =>
 
 export const verificationCode = (postId) =>
   request({
-    url: '/api/blade-auth/getVerificationCode',
+    url: '/api/blade-auth/auth/getVerificationCode',
     method: 'get',
     params: {
       postId

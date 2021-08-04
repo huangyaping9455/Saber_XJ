@@ -1,5 +1,16 @@
 import Layout from '@/page/index/';
 export default [{
+    path: '/wels',
+    name: '欢迎页',
+    component: () =>
+      import('@/page/wels/index'),
+    meta: {
+      keepAlive: true,
+      isTab: false,
+      isAuth: false
+    }
+  },
+  {
     path: '/login',
     name: '登录页',
     component: () =>
@@ -67,9 +78,20 @@ export default [{
   {
     path: '/',
     name: '主页',
-    redirect: '/wel'
-  },
-  {
+    // redirect: '/wel',
+    redirect: () => {
+      if (window.location.search === "") {
+        return '/wel';
+      } else {
+        return '/wels';
+      }
+    },
+    meta: {
+      keepAlive: true,
+      isTab: false,
+      isAuth: false
+    }
+  }, {
     path: '/myiframe',
     component: Layout,
     redirect: '/myiframe',
