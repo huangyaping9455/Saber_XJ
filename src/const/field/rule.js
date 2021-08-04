@@ -4,7 +4,8 @@ import {
   isMobile,
   isURL,
   validatenum,
-  validatenumord
+  validatenumord,
+  validatepsd
 } from '@/util/validate';
 
 export default {
@@ -54,6 +55,13 @@ export default {
     value: 'decimals',
     message: '必须为小数格式',
     regx: validatenumord,
+    validator
+  },
+  password: {
+    label: '密码',
+    value: 'password',
+    message: '强度不够 , 密码为字母和数字的组合 且不少于6位',
+    regx: validatepsd,
     validator
   }
 };
