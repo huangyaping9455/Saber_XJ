@@ -21,6 +21,7 @@
     "mockjs": "^1.0.1-beta3",
     "node-sass": "^4.14.1",
     "nprogress": "^0.2.0",
+    "qrcodejs2": "0.0.2",
     "script-loader": "^0.7.2",
     "vue": "^2.5.16",
     "vue-axios": "^2.1.2",

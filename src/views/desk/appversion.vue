@@ -41,16 +41,32 @@
           label="创建人姓名"
           width="100"
         ></el-table-column>
-        <el-table-column
-          prop="androidurl"
-          label="android地址"
-          width="350"
-        ></el-table-column>
-        <el-table-column
-          prop="iosurl"
-          label="ios地址"
-          width="350"
-        ></el-table-column>
+        <el-table-column label="android地址" width="350">
+          <template slot-scope="scope">
+            <el-popover placement="top" width="160" trigger="hover">
+              <span class="spanurl" slot="reference">{{
+                scope.row.androidurl
+              }}</span>
+              <div
+                :id="'qrcode' + scope.$index"
+                :ref="'qrcode' + scope.$index"
+              ></div>
+            </el-popover>
+          </template>
+        </el-table-column>
+        <el-table-column label="ios地址" width="350">
+          <template slot-scope="scope">
+            <el-popover placement="top" width="160" trigger="hover">
+              <span class="spanurl" slot="reference">{{
+                scope.row.iosurl
+              }}</span>
+              <div
+                :id="'qrcodes' + scope.$index"
+                :ref="'qrcodes' + scope.$index"
+              ></div>
+            </el-popover>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="remark"
           label="描述"
@@ -275,6 +291,7 @@ import {
   getStatus,
   getfild,
 } from "@/api/dept/noticelist";
+import QRCode from "qrcodejs2";
 let date = new Date();
 export default {
   data() {
@@ -286,7 +303,7 @@ export default {
       total: 1,
       status: "禁用",
       isModalVisible: false,
-      caleHeight:671,
+      caleHeight: 671,
       upload1: "",
       upload2: "",
       version: "",
@@ -294,7 +311,7 @@ export default {
       isdeleteds: [
         {
           label: "启用",
-          value:0,
+          value: 0,
         },
         {
           label: "禁用",
@@ -344,14 +361,16 @@ export default {
   computed: {},
   mounted() {
     this.onLoad();
-    this.$nextTick(function () {
-      this.caleHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 137;
+    this.$nextTick(function() {
+      this.caleHeight =
+        window.innerHeight - this.$refs.table.$el.offsetTop - 137;
       // 监听窗口大小变化
       let self = this;
       window.onresize = function() {
-        self.caleHeight = window.innerHeight - self.$refs.table.$el.offsetTop - 137
-      }
-    })
+        self.caleHeight =
+          window.innerHeight - self.$refs.table.$el.offsetTop - 137;
+      };
+    });
   },
   methods: {
     // 新增
@@ -438,8 +457,19 @@ export default {
         this.total = data.total;
         this.size = data.size;
         this.current = data.current;
-        this.tableData = data.records;
-        // console.log(this.tableData);
+        this.tableData = data.records.map((el, index) => {
+          if (el.androidurl !== "") {
+            this.$nextTick(() => {
+              this.qrcode(el.androidurl, index);
+            });
+          }
+          if (el.iosurl !== "") {
+            this.$nextTick(() => {
+              this.qrcode2(el.iosurl, index);
+            });
+          }
+          return el;
+        });
       });
     },
     //列表 刷新
@@ -483,6 +513,22 @@ export default {
       this.type = "";
       this.modletype = "";
       this.remark = "";
+    },
+    // android二维码
+    qrcode(url, index) {
+      let qrcode = new QRCode(`qrcode${index}`, {
+        width: 130, // 设置宽度，单位像素
+        height: 130, // 设置高度，单位像素
+        text: url, // 设置二维码内容或跳转地址
+      });
+    },
+    // ios二维码
+    qrcode2(url, index) {
+      let qrcodes = new QRCode(`qrcodes${index}`, {
+        width: 130, // 设置宽度，单位像素
+        height: 130, // 设置高度，单位像素
+        text: url, // 设置二维码内容或跳转地址
+      });
     },
   },
 };
