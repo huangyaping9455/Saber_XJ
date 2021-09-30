@@ -187,12 +187,17 @@ export default {
         cancelButtonText: this.$t("cancelText"),
         type: "warning",
       }).then(() => {
-        this.$store.dispatch("FedLogOut");
-        if (window.location.search === "") {
-          this.$router.push({ path: "/login" });
-        } else {
-          window.location.href = "http://39.105.108.33/dist/index.html";
-        }
+        this.$store.dispatch("FedLogOut").then((res) => {
+          if (res.data.code === 200) {
+            if (window.location.search === "") {
+              this.$router.push({ path: "/login" });
+            } else {
+              window.location.href = "http://39.105.108.33/dist/index.html";
+            }
+          } else {
+            this.$message.error("退出失败");
+          }
+        });
       });
     },
     checkPost() {

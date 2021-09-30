@@ -50,7 +50,14 @@
         </el-button>
         <el-input
           v-model="driveSearchChange"
+          clearable
           placeholder="请输入驾驶员姓名"
+          style="width: 11rem; margin-left: 0.6rem"
+        ></el-input>
+        <el-input
+          v-model="deptNamess"
+          clearable
+          placeholder="请输入企业名称"
           style="width: 11rem; margin-left: 0.6rem"
         ></el-input>
         <el-button

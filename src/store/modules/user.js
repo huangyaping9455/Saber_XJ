@@ -159,15 +159,32 @@ const user = {
     },
     // 注销session
     FedLogOut({
+      state,
       commit
     }) {
-      commit('SET_TOKEN', '');
-      commit('SET_MENU', []);
-      commit('SET_ROLES', []);
-      commit('DEL_ALL_TAG');
-      commit('CLEAR_LOCK');
-      removeToken();
-      logout();
+      // commit('SET_TOKEN', '');
+      // commit('SET_MENU', []);
+      // commit('SET_ROLES', []);
+      // commit('DEL_ALL_TAG');
+      // commit('CLEAR_LOCK');
+      // removeToken();
+      // logout(userId);
+      return new Promise((resolve, reject) => {
+        logout()
+          .then((res) => {
+            const data = res;
+            commit('SET_TOKEN', '');
+            commit('SET_MENU', []);
+            commit('SET_ROLES', []);
+            commit('DEL_ALL_TAG');
+            commit('CLEAR_LOCK');
+            removeToken();
+            resolve(data);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
     },
     GetTopMenu() {
       return new Promise((resolve) => {

@@ -46,6 +46,7 @@ export default {
       tableData: [],
       tableSearch: "",
       driveSearchChange: "",
+      deptNamess: "",
       tableSort: {
         orderColumn: "",
         order: 0,
@@ -223,6 +224,7 @@ export default {
         current: page.currentPage,
         size: page.pageSize,
         jiashiyuanxingming: this.driveSearchChange,
+        deptName: this.deptNamess,
         ...search,
         ...sort,
         ...other,

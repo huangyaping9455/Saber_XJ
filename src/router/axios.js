@@ -20,6 +20,11 @@ import {
 import website from '@/config/website';
 import NProgress from 'nprogress'; // progress bar
 import 'nprogress/nprogress.css'; // progress bar style
+// token解码
+// import jwtDecode from 'jwt-decode'
+// const decode =  jwtDecode("eyJ0eXAiOiJKc29uV2ViVG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpc3N1c2VyIiwiYXVkIjoiYXVkaWVuY2UiLCJyb2xlSWQiOiJCd0x0d0lTZnZJN21WNlVGRkdJVzZRPT0iLCJyb2xlTmFtZSI6InZQNlljV0x5cHdSUkxXbWFFZkoyV1E9PSIsInRlbmFudENvZGUiOiJWdFBEWTE4dis0NFlYQ2FKOFErU0JBPT0iLCJ1c2VyTmFtZSI6IjFGTXdNU0RkcWJoN2ZrUTRRMGlCMXc9PSIsInVzZXJJZCI6IkJ3THR3SVNmdkk3bVY2VUZGR0lXNlE9PSIsImFjY291bnQiOiJwSGhZa29ranJqYmkvOERyVkZRVU1nPT0iLCJleHAiOjE2MzA0MzY0MDAsIm5iZiI6MTYzMDM3NjE2Mn0.Ia3MNcrb70x7Xi1_rLQ6-rCjxNnsVjiPsyabiqgqizw");
+// console.log(decode);
+
 axios.defaults.timeout = 30000;
 // 返回其他状态吗
 axios.defaults.validateStatus = function (status) {

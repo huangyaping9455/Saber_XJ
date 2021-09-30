@@ -10,7 +10,7 @@ export const loginByUsername = (
     type
   ) =>
   request({
-    url: '/api/blade-auth/auth/signIn',
+    url: '/api/blade-auth/auth/operatingCenterSignIn',
     method: 'post',
     params: {
       name,
@@ -57,7 +57,8 @@ export const getMenu = (postId) =>
 export const logout = () =>
   request({
     url: '/api/blade-auth/auth/signOut',
-    method: 'get'
+    // url: '/api/blade-platform/platform/qiYeShouYe/signOut',
+    method: 'get',
   });
 
 export const getTopMenu = () =>
