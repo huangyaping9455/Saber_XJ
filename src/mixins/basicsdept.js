@@ -333,6 +333,19 @@ export default {
         row.cheliangpaizhao = this.formData.cheliangpaizhao.replace(/(^\s*)|(\s*$)/g, "");
         row.zongduanid = this.formData.zongduanid.replace(/(^\s*)|(\s*$)/g, "");
       }
+
+      if (row.extendType == "岗位" || row.extendType == "部门") {
+        if (row.anquanzhize != "") {
+          if (row.anquanzhize.indexOf("<") !== -1 || row.anquanzhize.indexOf(">") !== -1) {
+            row.anquanzhize = row.anquanzhize.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
+        }
+        if (row.gangweizhize != "") {
+          if (row.gangweizhize.indexOf("<") !== -1 || row.gangweizhize.indexOf(">") !== -1) {
+            row.gangweizhize = row.gangweizhize.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
+        }
+      }
       delete row.id;
       delete row.isdelete;
       insert(this.CONFIG.insertModel, this.sendHandle(row)).then((res) => {
@@ -370,9 +383,18 @@ export default {
         row.createtime = this.getNowFormatDate();
       }
       row.isdelete = 0;
-      if ((this.nodeData && this.nodeData.extendType == "岗位") || (this.nodeData && this.nodeData.extendType == "部门")) {
+      if (row.leixing == "岗位" || row.leixing == "部门") {
         row.deptId = this.nodeData.id;
-        row.id = this.nodeData.id;
+        if (row.anquanzhize != "") {
+          if (row.anquanzhize.indexOf("<") !== -1 || row.anquanzhize.indexOf(">") !== -1) {
+            row.anquanzhize = row.anquanzhize.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
+        }
+        if (row.gangweizhize != "") {
+          if (row.gangweizhize.indexOf("<") !== -1 || row.gangweizhize.indexOf(">") !== -1) {
+            row.gangweizhize = row.gangweizhize.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          }
+        }
       }
       if (row.jigouleixing === "qiye" || row.jigouleixing === "geti" || row.jigouleixing === "qita") {
         if ((this.node && this.node.extendType === "岗位") || (this.node && this.node.extendType === "部门")) {

@@ -188,6 +188,7 @@ export default {
           this.formData.fuzeren = res.data.data.fuzeren
           this.formData.gangweizhize = res.data.data.gangweizhize;
           this.formData.anquanzhize = res.data.data.anquanzhize;
+          this.formData.id = res.data.data.id;
         })
       } else if (this.node.extendType === "机构") {
         this.getDetail(this.node.id);

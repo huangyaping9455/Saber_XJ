@@ -66,6 +66,7 @@ export default {
         this.row.jigouleixing == "qita" ||
         this.row.jigouleixing == "fenzu" ||
         this.row.jigouleixing == "sheng" ||
+        this.row.jigouleixing == "xian" ||
         this.row.jigouleixing == "shi"
       ) {
         if (str !== -1) {

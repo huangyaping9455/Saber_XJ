@@ -232,21 +232,21 @@ export default {
       this.tableLoading = true;
       return getList(api, params).then((res) => {
         res.data.data.records = res.data.data.records.map((i) => {
-          if (i.zhaopian) {
-            i.zhaopian = eval(i.zhaopian);
-          }
-          if (i.shenfenzhengfujian) {
-            i.shenfenzhengfujian = eval(i.shenfenzhengfujian)
-          }
-          if (i.congyezhengfujian) {
-            i.congyezhengfujian = eval(i.congyezhengfujian);
-          }
-          if (i.jiashizhengfujian) {
-            i.jiashizhengfujian = eval(i.jiashizhengfujian);
-          }
-          if (i.fuyinjian) {
-            i.fuyinjian = eval(i.fuyinjian);
-          }
+          // if (i.zhaopian) {
+          //   i.zhaopian = eval(i.zhaopian);
+          // }
+          // if (i.shenfenzhengfujian) {
+          //   i.shenfenzhengfujian = eval(i.shenfenzhengfujian)
+          // }
+          // if (i.congyezhengfujian) {
+          //   i.congyezhengfujian = eval(i.congyezhengfujian);
+          // }
+          // if (i.jiashizhengfujian) {
+          //   i.jiashizhengfujian = eval(i.jiashizhengfujian);
+          // }
+          // if (i.fuyinjian) {
+          //   i.fuyinjian = eval(i.fuyinjian);
+          // }
           return i;
         })
         let data = res.data.data;
@@ -357,6 +357,10 @@ export default {
         row.zongduanid = this.formData.zongduanid.replace(/(^\s*)|(\s*$)/g, "");
       }
       row.deptId = row.deptName;
+      delete row.deptName;
+      delete row.xingbieshow;
+      delete row.congyerenyuanleixingshow;
+      delete row.jiashiyuanleixingshow;
       insert(this.CONFIG.insertModel, this.sendHandle(row)).then((res) => {
         this.$message({
           type: "success",
@@ -391,6 +395,12 @@ export default {
       if (row.deptName !== row.$deptName) {
         row.deptId = row.deptName;
       }
+      delete row.deptName;
+      delete row.cheliangpaizhao;
+      delete row.chepaiyanse;
+      delete row.xingbieshow;
+      delete row.congyerenyuanleixingshow;
+      delete row.jiashiyuanleixingshow;
       update(this.CONFIG.updateModel, this.sendHandle(row)).then((res) => {
         this.$message({
           type: "success",
@@ -442,7 +452,7 @@ export default {
           if (item.dicKey === "deptName") {
             item.dicData = [];
             getByIdDeptList(this.$store.getters.deptId).then(res => {
-              item.cascaderItem = ["jiashiyuanxingming", "xingbie"];
+              // item.cascaderItem = ["jiashiyuanxingming", "xingbie"];
               item.filterable = true;
               item.dicData = res.data.data.map(el => {
                 el.label = el.deptName;

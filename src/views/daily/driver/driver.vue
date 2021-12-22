@@ -239,6 +239,53 @@ export default {
     },
     // 弹出框beforeopen
     beforeOpen(done, type) {
+      if (this.formData.zhaopian) {
+        if (this.formData.zhaopian.indexOf("[") != -1) {
+          this.formData.zhaopian = eval(this.formData.zhaopian);
+        } else {
+          this.formData.zhaopian = [{ url: this.formData.zhaopian }];
+        }
+      }
+      if (this.formData.shenfenzhengfujian) {
+        if (this.formData.shenfenzhengfujian.indexOf("[") != -1) {
+          this.formData.shenfenzhengfujian = eval(
+            this.formData.shenfenzhengfujian
+          );
+        } else {
+          this.formData.shenfenzhengfujian = [
+            { url: this.formData.shenfenzhengfujian },
+          ];
+        }
+      }
+      if (this.formData.congyezhengfujian) {
+        if (this.formData.congyezhengfujian.indexOf("[") != -1) {
+          this.formData.congyezhengfujian = eval(
+            this.formData.congyezhengfujian
+          );
+        } else {
+          this.formData.congyezhengfujian = [
+            { url: this.formData.congyezhengfujian },
+          ];
+        }
+      }
+      if (this.formData.jiashizhengfujian) {
+        if (this.formData.jiashizhengfujian.indexOf("[") != -1) {
+          this.formData.jiashizhengfujian = eval(
+            this.formData.jiashizhengfujian
+          );
+        } else {
+          this.formData.jiashizhengfujian = [
+            { url: this.formData.jiashizhengfujian },
+          ];
+        }
+      }
+      if (this.formData.fuyinjian) {
+        if (this.formData.fuyinjian.indexOf("[") != -1) {
+          this.formData.fuyinjian = eval(this.formData.fuyinjian);
+        } else {
+          this.formData.fuyinjian = [{ url: this.formData.fuyinjian }];
+        }
+      }
       if (type === "view") {
         for (let i in this.FIELD) {
           this.FIELD[i].disabled = true;

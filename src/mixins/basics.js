@@ -588,6 +588,7 @@ export default {
       //   this.formData.city = cityName;
       //   this.formData.country = countryName;
       // }
+      delete row.securityofficertelephone;
       // 修改时 删除area字段
       if (this.CONFIG.updateModel === "/blade-platform/platform/vehicle/update") {
         if (row.area !== undefined) {
